@@ -55,9 +55,17 @@ public class StuckWin {
      * l'attribut d'état "state"
      */
     void affiche() {
-      // votre code ici
+        ligne("c",5,5);
     }
 
+    public static void ligne(String n, int x, int y){
+        for (int i =0 ; i<x ; i ++){
+            for (int j=0 ; j<y ; j++ ){
+                System.out.print(n);
+            }
+            System.out.println();
+        }
+    }
     /**
      * Joue un tour
      * @param couleur couleur du pion à jouer

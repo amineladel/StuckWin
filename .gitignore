@@ -2,9 +2,7 @@
 bin
 obj
 
-# PhpStorm
+# IntelliJ IDEA
 .idea
+out
 *.userprefs 
-
-# vscode
-.vscode
