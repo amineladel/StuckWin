@@ -1,0 +1,10 @@
+# Binaries
+bin
+obj
+
+# PhpStorm
+.idea
+*.userprefs 
+
+# vscode
+.vscode
