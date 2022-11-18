@@ -1,0 +1,6 @@
+projectKey=Do8E3FPTsrXAeDPKPtAcjTEHz4rL
+serverUrl=https://sonarqube.lucas-besson.com
+serverVersion=9.7.1.62043
+dashboardUrl=https://sonarqube.lucas-besson.com/dashboard?id=Do8E3FPTsrXAeDPKPtAcjTEHz4rL
+ceTaskId=AYSMoFqTErcCsBYseE0K
+ceTaskUrl=https://sonarqube.lucas-besson.com/api/ce/task?id=AYSMoFqTErcCsBYseE0K
