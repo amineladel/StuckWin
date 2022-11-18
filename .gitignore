@@ -3,6 +3,6 @@ bin
 obj
 
 # IntelliJ IDEA
-.idea
-out
-*.userprefs 
+#.idea
+#out
+#*.userprefs
