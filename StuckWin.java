@@ -31,8 +31,8 @@ public class StuckWin {
      * @return enum {OK, BAD_COLOR, DEST_NOT_FREE, EMPTY_SRC, TOO_FAR, EXT_BOARD, EXIT} selon le déplacement
      */
     Result deplace(char couleur, String lcSource, String lcDest,  ModeMvt mode) {
-      // votre code ici. Supprimer la ligne ci-dessous.
-      throw new java.lang.UnsupportedOperationException("à compléter");
+        // votre code ici. Supprimer la ligne ci-dessous.
+        throw new java.lang.UnsupportedOperationException("à compléter");
     }
 
 
@@ -46,8 +46,8 @@ public class StuckWin {
      * @return tableau des trois positions jouables par le pion (redondance possible sur les bords)
      */
     String[] possibleDests(char couleur, int idLettre, int idCol){
-      // votre code ici. Supprimer la ligne ci-dessous.
-      throw new java.lang.UnsupportedOperationException("à compléter");
+        // votre code ici. Supprimer la ligne ci-dessous.
+        throw new java.lang.UnsupportedOperationException("à compléter");
     }
 
     /**
@@ -55,25 +55,56 @@ public class StuckWin {
      * l'attribut d'état "state"
      */
     void affiche() {
-        ligne("c",5,5);
+        int lignes = 4;
+        System.out.println("\nTEST JEU STUCKWIN\n");
+        for (int i = 0; i < lignes; i++) {
+            for (int j = 0; j < lignes - i; j++) {
+                System.out.print("  ");
+            }
+            for (int k = 0; k <= i; k++) {
+                System.out.print("A1  ");
+            }
+            System.out.println("");
+        }
+
+        for (int i = 0; i < 5; i++) {
+            if (i%2 == 1){
+                for (int j = 0; j < 4; j++){
+                    System.out.print("  A1");
+                }
+            } else{
+                System.out.print("  ");
+                for (int j = 0; j < 3; j++){
+                    System.out.print("  A1");
+                }
+            }
+
+
+            System.out.println("");
+        }
+
+
+        for (int i = lignes-1; i >= 0; i--) {
+            for (int j = 0; j < lignes - i; j++) {
+                System.out.print("  ");
+            }
+            for (int k = 0; k <= i; k++) {
+                System.out.print("A1  ");
+            }
+            System.out.println("");
+        }
+        System.out.println("");
     }
 
-    public static void ligne(String n, int x, int y){
-        for (int i =0 ; i<x ; i ++){
-            for (int j=0 ; j<y ; j++ ){
-                System.out.print(n);
-            }
-            System.out.println();
-        }
-    }
+
     /**
      * Joue un tour
      * @param couleur couleur du pion à jouer
      * @return tableau contenant la position de départ et la destination du pion à jouer.
      */
     String[] jouerIA(char couleur) {
-      // votre code ici. Supprimer la ligne ci-dessous.
-      throw new java.lang.UnsupportedOperationException("à compléter");
+        // votre code ici. Supprimer la ligne ci-dessous.
+        throw new java.lang.UnsupportedOperationException("à compléter");
     }
 
     /**
@@ -109,8 +140,8 @@ public class StuckWin {
      * @return
      */
     char finPartie(char couleur){
-      // votre code ici. Supprimer la ligne ci-dessous.
-      throw new java.lang.UnsupportedOperationException("à compléter");
+        // votre code ici. Supprimer la ligne ci-dessous.
+        throw new java.lang.UnsupportedOperationException("à compléter");
     }
 
 
@@ -128,23 +159,23 @@ public class StuckWin {
 
         // version console
         do {
-              // séquence pour Bleu ou rouge
-              jeu.affiche();
-              do {
-                  status = Result.EXIT;
-                  reponse = jeu.jouer(curCouleur);
-                  src = reponse[0];
-                  dest = reponse[1];
-                  if("q".equals(src))
-                      return;
-                  status = jeu.deplace(curCouleur, src, dest, ModeMvt.REAL);
-                  partie = jeu.finPartie(nextCouleur);
-                  System.out.println("status : "+status + " partie : " + partie);
-              } while(status != Result.OK && partie=='N');
-              tmp = curCouleur;
-              curCouleur = nextCouleur;
-              nextCouleur = tmp;
-              cpt ++;
+            // séquence pour Bleu ou rouge
+            jeu.affiche();
+            do {
+                status = Result.EXIT;
+                reponse = jeu.jouer(curCouleur);
+                src = reponse[0];
+                dest = reponse[1];
+                if("q".equals(src))
+                    return;
+                status = jeu.deplace(curCouleur, src, dest, ModeMvt.REAL);
+                partie = jeu.finPartie(nextCouleur);
+                System.out.println("status : "+status + " partie : " + partie);
+            } while(status != Result.OK && partie=='N');
+            tmp = curCouleur;
+            curCouleur = nextCouleur;
+            nextCouleur = tmp;
+            cpt ++;
         } while(partie =='N'); // TODO affiche vainqueur
         System.out.printf("Victoire : " + partie + " (" + (cpt/2) + " coups)");
     }
