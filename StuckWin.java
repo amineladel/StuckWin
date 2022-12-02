@@ -22,14 +22,32 @@ public class StuckWin {
             {'-', 'B', 'B', 'B', 'B', '-', '-', '-'},
     };
 
-    /**
-     * Déplace un pion ou simule son déplacement
-     * @param couleur couleur du pion à déplacer
-     * @param lcSource case source Lc
-     * @param lcDest case destination Lc
-     * @param mode ModeMVT.REAL/SIMU selon qu'on réalise effectivement le déplacement ou qu'on le simule seulement.
-     * @return enum {OK, BAD_COLOR, DEST_NOT_FREE, EMPTY_SRC, TOO_FAR, EXT_BOARD, EXIT} selon le déplacement
+    /* NE PAS TOUCHER
+    char[][] state_original = {
+            {'-', '-', '-', '-', 'R', 'R', 'R', 'R'},
+            {'-', '-', '-', '.', 'R', 'R', 'R', 'R'},
+            {'-', '-', '.', '.', '.', 'R', 'R', 'R'},
+            {'-', 'B', 'B', '.', '.', '.', 'R', 'R'},
+            {'-', 'B', 'B', 'B', '.', '.', '.', '-'},
+            {'-', 'B', 'B', 'B', 'B', '.', '-', '-'},
+            {'-', 'B', 'B', 'B', 'B', '-', '-', '-'},
+    };
+
      */
+
+    char[] lettre = {'A', 'B','C','D','E','F','G'};
+
+
+
+
+        /**
+         * Déplace un pion ou simule son déplacement
+         * @param couleur couleur du pion à déplacer
+         * @param lcSource case source Lc
+         * @param lcDest case destination Lc
+         * @param mode ModeMVT.REAL/SIMU selon qu'on réalise effectivement le déplacement ou qu'on le simule seulement.
+         * @return enum {OK, BAD_COLOR, DEST_NOT_FREE, EMPTY_SRC, TOO_FAR, EXT_BOARD, EXIT} selon le déplacement
+         */
     Result deplace(char couleur, String lcSource, String lcDest,  ModeMvt mode) {
         // votre code ici. Supprimer la ligne ci-dessous.
         throw new java.lang.UnsupportedOperationException("à compléter");
@@ -54,47 +72,47 @@ public class StuckWin {
      * Affiche le plateau de jeu dans la configuration portée par
      * l'attribut d'état "state"
      */
-    void affiche() {
-        int lignes = 4;
-        System.out.println("\nTEST JEU STUCKWIN\n");
-        for (int i = 0; i < lignes; i++) {
-            for (int j = 0; j < lignes - i; j++) {
-                System.out.print("  ");
-            }
-            for (int k = 0; k <= i; k++) {
-                System.out.print("A1  ");
-            }
-            System.out.println("");
-        }
 
-        for (int i = 0; i < 5; i++) {
-            if (i%2 == 1){
-                for (int j = 0; j < 4; j++){
-                    System.out.print("  A1");
-                }
-            } else{
-                System.out.print("  ");
-                for (int j = 0; j < 3; j++){
-                    System.out.print("  A1");
+    public  void affiche() {
+        System.out.println();
+        for (int i = state.length-1; i >= 0; i--) {
+            System.out.print("  ");
+            for (int j = 0; j < 7; j++) {
+                if (j >= i) {
+                    if(state[j-i][j+1] == 'R')
+                        System.out.print(ConsoleColors.RED_BACKGROUND + lettre[j-i] + (j+1) + ConsoleColors.RESET + "  " );
+                    else if (state[j-i][j+1] == '.')
+                        System.out.print(ConsoleColors.WHITE_BACKGROUND + lettre[j-i] + (j+1) + ConsoleColors.RESET + "  " );
+                    else if (state[j-i][j+1] == '-')
+                        System.out.print( "    " );
+                    else if (state[j-i][j+1] == 'B')
+                        System.out.print(ConsoleColors.BLUE_BACKGROUND + lettre[j-i] + (j+1) + ConsoleColors.RESET + "  " );
+                } else {
+                    System.out.print("  ");
                 }
             }
-
-
-            System.out.println("");
+            System.out.println();
         }
 
-
-        for (int i = lignes-1; i >= 0; i--) {
-            for (int j = 0; j < lignes - i; j++) {
-                System.out.print("  ");
+        for (int i = 0; i < state.length; i++) {
+            for (int j = state[i].length; j > 0; j--) {
+                if (i + j < state.length) {
+                    if(state[i + j][j] == 'B')
+                        System.out.print(ConsoleColors.BLUE_BACKGROUND + lettre[i + j] + j + ConsoleColors.RESET + "  " );
+                    else if (state[i + j][j] == '.')
+                        System.out.print(ConsoleColors.WHITE_BACKGROUND + lettre[i + j] + j + ConsoleColors.RESET + "  ");
+                    else if (state[i + j][j] == '-')
+                        System.out.print("    ");
+                    else if (state[i + j][j] == 'R') {
+                        System.out.print(ConsoleColors.RED_BACKGROUND + lettre[i + j] + j + ConsoleColors.RESET + "  ");
+                    }
+                } else
+                    System.out.print("  ");
             }
-            for (int k = 0; k <= i; k++) {
-                System.out.print("A1  ");
-            }
-            System.out.println("");
+            System.out.println();
         }
-        System.out.println("");
     }
+
 
 
     /**
