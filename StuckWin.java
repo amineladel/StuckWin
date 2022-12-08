@@ -39,7 +39,7 @@ public class StuckWin {
 
      */
 
-    char[] lettre = {'A', 'B','C','D','E','F','G'};
+    char[] lettre = {'A','B','C','D','E','F','G'};
 
 
 
@@ -53,8 +53,31 @@ public class StuckWin {
          * @return enum {OK, BAD_COLOR, DEST_NOT_FREE, EMPTY_SRC, TOO_FAR, EXT_BOARD, EXIT} selon le déplacement
          */
     Result deplace(char couleur, String lcSource, String lcDest,  ModeMvt mode) {
-        // votre code ici. Supprimer la ligne ci-dessous.
-        throw new java.lang.UnsupportedOperationException("à compléter");
+        int lignesource =0;
+        int lignedest =0;
+        int colonnesource = Character.getNumericValue(lcSource.charAt(1));
+        int colonnedest=Character.getNumericValue(lcDest.charAt(1));;
+        for (int i =0 ; i<lettre.length ; i ++){
+            if (lcSource.charAt(0)==lettre[i]){
+                lignesource = i;
+            }
+            if (lcDest.charAt(0)==lettre[i]){
+                lignedest = i;
+            }
+
+        }
+        System.out.println(lignesource);
+        System.out.println(colonnesource);
+        System.out.println(lignedest);
+        System.out.println(colonnedest);
+
+        if (state[lignesource][colonnesource] != couleur)
+            return Result.BAD_COLOR;
+
+        state[lignesource][colonnesource] = '.';
+        state[lignedest][colonnedest] = couleur;
+
+        return Result.OK;
     }
 
 
@@ -68,26 +91,24 @@ public class StuckWin {
      * @return tableau des trois positions jouables par le pion (redondance possible sur les bords)
      */
     String[] possibleDests(char couleur, int idLettre, int idCol){
-        // votre code ici. Supprimer la ligne ci-dessous.
-        // throw new java.lang.UnsupportedOperationException("à compléter");
-        String[] resultat = {"non", "non", "non"};
+        String[] resultat = new String[3];
 
         if (couleur =='B'){
             if (state[idLettre-1][idCol] == '.')
-                resultat[0] = "oui";
+                resultat[0] = "" + (lettre[idLettre-1]) + (idCol);
             if (state[idLettre-1][idCol+1] == '.')
-                resultat[1] = "oui";
+                resultat[1] = "" + (lettre[idLettre-1]) + (idCol+1);
             if (state[idLettre][idCol+1] == '.')
-                resultat[2] = "oui";
+                resultat[2] = "" + (lettre[idLettre]) + (idCol+1);
         }
 
         else if (couleur =='R'){
             if (state[idLettre+1][idCol] == '.')
-                resultat[0] = "oui";
+                resultat[0] = "" + (lettre[idLettre+1]) + (idCol);
             if (state[idLettre+1][idCol-1] == '.')
-                resultat[1] = "oui";
+                resultat[1] = "" + (lettre[idLettre+1]) + (idCol-1);
             if (state[idLettre][idCol-1] == '.')
-                resultat[2] = "oui";
+                resultat[2] = "" +(lettre[idLettre]) + (idCol-1);
         }
 
         System.out.println(Arrays.toString(resultat));
@@ -99,7 +120,7 @@ public class StuckWin {
      * l'attribut d'état "state"
      */
 
-    public  void affiche() {
+    public void affiche() {
         System.out.println();
         for (int i = state.length-1; i >= 0; i--) {
             System.out.print("  ");
@@ -120,25 +141,31 @@ public class StuckWin {
             System.out.println();
         }
 
-        for (int i = 0; i < state.length; i++) {
-            for (int j = state[i].length; j > 0; j--) {
+        for (int i = 0; i <= state.length; i++) {
+            String temp = "";
+            for (int j = 0; j < 7; j++) {
                 if (i + j < state.length) {
-                    if(state[i + j][j] == 'B')
-                        System.out.print(ConsoleColors.BLUE_BACKGROUND + lettre[i + j] + j + ConsoleColors.RESET + "  " );
-                    else if (state[i + j][j] == '.')
-                        System.out.print(ConsoleColors.WHITE_BACKGROUND + lettre[i + j] + j + ConsoleColors.RESET + "  ");
-                    else if (state[i + j][j] == '-')
-                        System.out.print("    ");
-                    else if (state[i + j][j] == 'R') {
-                        System.out.print(ConsoleColors.RED_BACKGROUND + lettre[i + j] + j + ConsoleColors.RESET + "  ");
-                    }
-                } else
+                    if(state[j+i][j] == 'R')
+                        temp += (ConsoleColors.RED_BACKGROUND + lettre[j+i] + j + ConsoleColors.RESET + "  ");
+                    else if (state[j+i][j] == '.')
+                        temp += (ConsoleColors.WHITE_BACKGROUND + lettre[j+i] + j + ConsoleColors.RESET + "  ");
+                    else if (state[j+i][j] == '-')
+                        temp += ("    ");
+                    else if (state[j+i][j] == 'B')
+                        temp += (ConsoleColors.BLUE_BACKGROUND + lettre[j+i] + j + ConsoleColors.RESET + "  ");
+                } else {
                     System.out.print("  ");
+                }
             }
+            if (i == 0)
+                System.out.print(temp);
+            else
+                System.out.print(temp);
             System.out.println();
         }
+
         // Test
-        possibleDests('B', 3, 1);
+        possibleDests('B', 3, 2);
         possibleDests('R', 3, 7);
     }
 
@@ -187,8 +214,9 @@ public class StuckWin {
      * @return
      */
     char finPartie(char couleur){
-        // votre code ici. Supprimer la ligne ci-dessous.
-        throw new java.lang.UnsupportedOperationException("à compléter");
+        return 'N';
+        //throw new java.lang.UnsupportedOperationException("à compléter");
+
     }
 
 
