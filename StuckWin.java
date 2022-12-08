@@ -157,10 +157,7 @@ public class StuckWin {
                     System.out.print("  ");
                 }
             }
-            if (i == 0)
-                System.out.print(temp);
-            else
-                System.out.print(temp);
+            System.out.print(temp);
             System.out.println();
         }
 
