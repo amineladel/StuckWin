@@ -2,6 +2,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+// à enlever à la fin
+import java.util.Arrays;
+
+
 public class StuckWin {
     static final Scanner input = new Scanner(System.in);
     private static final double BOARD_SIZE = 7;
@@ -65,7 +69,29 @@ public class StuckWin {
      */
     String[] possibleDests(char couleur, int idLettre, int idCol){
         // votre code ici. Supprimer la ligne ci-dessous.
-        throw new java.lang.UnsupportedOperationException("à compléter");
+        // throw new java.lang.UnsupportedOperationException("à compléter");
+        String[] resultat = {"non", "non", "non"};
+
+        if (couleur =='B'){
+            if (state[idLettre-1][idCol] == '.')
+                resultat[0] = "oui";
+            if (state[idLettre-1][idCol+1] == '.')
+                resultat[1] = "oui";
+            if (state[idLettre][idCol+1] == '.')
+                resultat[2] = "oui";
+        }
+
+        else if (couleur =='R'){
+            if (state[idLettre+1][idCol] == '.')
+                resultat[0] = "oui";
+            if (state[idLettre+1][idCol-1] == '.')
+                resultat[1] = "oui";
+            if (state[idLettre][idCol-1] == '.')
+                resultat[2] = "oui";
+        }
+
+        System.out.println(Arrays.toString(resultat));
+        return resultat;
     }
 
     /**
@@ -111,6 +137,9 @@ public class StuckWin {
             }
             System.out.println();
         }
+        // Test
+        possibleDests('B', 3, 1);
+        possibleDests('R', 3, 7);
     }
 
 
