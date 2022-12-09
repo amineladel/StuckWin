@@ -53,31 +53,53 @@ public class StuckWin {
          * @return enum {OK, BAD_COLOR, DEST_NOT_FREE, EMPTY_SRC, TOO_FAR, EXT_BOARD, EXIT} selon le déplacement
          */
     Result deplace(char couleur, String lcSource, String lcDest,  ModeMvt mode) {
-        int lignesource =0;
-        int lignedest =0;
+        int lignesource = 0;
+        int lignedest = 0;
         int colonnesource = Character.getNumericValue(lcSource.charAt(1));
-        int colonnedest=Character.getNumericValue(lcDest.charAt(1));;
-        for (int i =0 ; i<lettre.length ; i ++){
-            if (lcSource.charAt(0)==lettre[i]){
+        int colonnedest = Character.getNumericValue(lcDest.charAt(1));
+        for (int i = 0; i < lettre.length; i++) {
+            if (lcSource.charAt(0) == lettre[i]) {
                 lignesource = i;
             }
-            if (lcDest.charAt(0)==lettre[i]){
+            if (lcDest.charAt(0) == lettre[i]) {
                 lignedest = i;
             }
 
         }
-        System.out.println(lignesource);
-        System.out.println(colonnesource);
-        System.out.println(lignedest);
-        System.out.println(colonnedest);
 
-        if (state[lignesource][colonnesource] != couleur)
+
+        if (state[lignesource][colonnesource] != couleur) {
             return Result.BAD_COLOR;
+        }
 
-        state[lignesource][colonnesource] = '.';
-        state[lignedest][colonnedest] = couleur;
+        if (state[lignedest][colonnedest] == 'R' || state[lignedest][colonnedest] == 'B') {
+            return Result.DEST_NOT_FREE;
+        }
 
-        return Result.OK;
+        if (state[lignesource][colonnesource] == '.') {
+            return Result.EMPTY_SRC;
+        }
+
+        if (state[lignedest][colonnedest] == '-' || colonnedest>state[0].length) {
+            return Result.EXT_BOARD;
+        }
+
+        String[] possibledest;
+        possibledest = possibleDests(couleur, lignesource, colonnesource);
+
+        for (int i = 0; i < 3; i++) {
+            if ((possibledest[i+1]).equals(lcDest)) {
+                if (mode == ModeMvt.REAL) {
+                    state[lignesource][colonnesource] = '.';
+                    state[lignedest][colonnedest] = couleur;
+                    return Result.OK;
+                } else {
+                    return Result.OK;
+                }
+            }
+
+        }
+        return Result.EXIT;
     }
 
 
@@ -111,7 +133,7 @@ public class StuckWin {
                 resultat[2] = "" +(lettre[idLettre]) + (idCol-1);
         }
 
-        System.out.println(Arrays.toString(resultat));
+        // System.out.println(Arrays.toString(resultat));
         return resultat;
     }
 
@@ -161,9 +183,6 @@ public class StuckWin {
             System.out.println();
         }
 
-        // Test
-        possibleDests('B', 3, 2);
-        possibleDests('R', 3, 7);
     }
 
 
@@ -196,11 +215,16 @@ public class StuckWin {
                 break;
             case 'R':
                 System.out.println("Mouvement " + couleur);
+                src = input.next();
+                dst = input.next();
+                System.out.println(src + "->" + dst);
+                break;
+                /*System.out.println("Mouvement " + couleur);
                 mvtIa = jouerIA(couleur);
                 src = mvtIa[0];
                 dst = mvtIa[1];
                 System.out.println(src + "->" + dst);
-                break;
+                break;*/
         }
         return new String[]{src, dst};
     }
