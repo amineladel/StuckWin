@@ -211,9 +211,17 @@ public class StuckWin {
      * @return
      */
     char finPartie(char couleur){
-        return 'N';
+        for (int i = 0; i<state.length ; i++){
+            for (int j = 0; j<state.length ; j++){
+                if (state[i][j] == couleur){
+                    if (possibleDests(couleur,i,j)[0] != "null" || possibleDests(couleur,i,j)[1] != "null" || possibleDests(couleur,i,j)[2] != "null"){
+                        return 'N';
+                    }
+                }
+            }
+        }
+        return couleur;
         //throw new java.lang.UnsupportedOperationException("à compléter");
-
     }
 
 
