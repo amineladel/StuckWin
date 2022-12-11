@@ -16,6 +16,7 @@ public class StuckWin {
     final int SIZE = 8;
     final char VIDE = '.';
     // 'B'=bleu 'R'=rouge '.'=vide '-'=n'existe pas
+
     char[][] state = {
             {'-', '-', '-', '-', 'R', 'R', 'R', 'R'},
             {'-', '-', '-', '.', 'R', 'R', 'R', 'R'},
@@ -25,6 +26,28 @@ public class StuckWin {
             {'-', 'B', 'B', 'B', 'B', '.', '-', '-'},
             {'-', 'B', 'B', 'B', 'B', '-', '-', '-'},
     };
+
+    /* test_bleu_vicroire
+    char[][] state = {
+            {'-', '-', '-', '-', 'R', 'R', 'R', 'R'},
+            {'-', '-', '-', '.', 'R', 'R', 'R', 'R'},
+            {'-', '-', 'R', 'R', '.', 'R', 'R', 'R'},
+            {'-', 'B', 'B', 'R', 'R', '.', 'R', 'R'},
+            {'-', 'B', 'B', 'B', 'R', 'R', '.', '-'},
+            {'-', 'B', '.', 'B', 'B', 'R', '-', '-'},
+            {'-', 'B', 'B', 'B', 'B', '-', '-', '-'},
+    };*/
+
+    /* test_rouge_vicroire
+    char[][] state = {
+            {'-', '-', '-', '-', 'R', 'R', 'R', 'R'},
+            {'-', '-', '-', 'B', 'R', 'R', '.', 'R'},
+            {'-', '-', '.', 'B', 'B', 'R', 'R', 'R'},
+            {'-', 'B', 'B', '.', 'B', 'B', 'R', 'R'},
+            {'-', 'B', 'B', 'B', '.', 'B', 'B', '-'},
+            {'-', 'B', 'B', 'B', 'B', '.', '-', '-'},
+            {'-', 'B', 'B', 'B', 'B', '-', '-', '-'},
+    }; */
 
     /* NE PAS TOUCHER
     char[][] state_original = {
@@ -242,15 +265,17 @@ public class StuckWin {
         for (int i = 0; i<state.length ; i++){
             for (int j = 0; j<state[i].length ; j++){
                 if (state[i][j] == couleur){
-                    if (possibleDests(couleur,i,j)[0] != "null" || possibleDests(couleur,i,j)[1] != "null" || possibleDests(couleur,i,j)[2] != "null"){
+                    String[] temp = possibleDests(couleur, i, j);
+                    if ((temp[0] != null && !temp[0].equals("null")) || (temp[1] != null && !temp[1].equals("null")) || (temp[2] != null && !temp[2].equals("null"))){
                         return 'N';
                     }
                 }
             }
         }
         return couleur;
-        //throw new java.lang.UnsupportedOperationException("à compléter");
     }
+
+
 
 
     public static void main(String[] args) {
