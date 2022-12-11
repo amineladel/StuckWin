@@ -67,6 +67,8 @@ public class StuckWin {
 
         }
 
+        String[] possibledest;
+        possibledest = possibleDests(couleur, lignesource, colonnesource);
 
         if (state[lignesource][colonnesource] != couleur) {
             return Result.BAD_COLOR;
@@ -84,11 +86,12 @@ public class StuckWin {
             return Result.EXT_BOARD;
         }
 
-        String[] possibledest;
-        possibledest = possibleDests(couleur, lignesource, colonnesource);
 
         for (int i = 0; i < 3; i++) {
-            if ((possibledest[i+1]).equals(lcDest)) {
+            if (possibledest[i] == null){
+                possibledest[i] = "N";
+            }
+            if ((possibledest[i]).equals(lcDest)) {
                 if (mode == ModeMvt.REAL) {
                     state[lignesource][colonnesource] = '.';
                     state[lignedest][colonnedest] = couleur;
@@ -133,7 +136,7 @@ public class StuckWin {
                 resultat[2] = "" +(lettre[idLettre]) + (idCol-1);
         }
 
-        // System.out.println(Arrays.toString(resultat));
+        //System.out.println(Arrays.toString(resultat));
         return resultat;
     }
 
@@ -219,7 +222,8 @@ public class StuckWin {
                 dst = input.next();
                 System.out.println(src + "->" + dst);
                 break;
-                /*System.out.println("Mouvement " + couleur);
+                /*
+                System.out.println("Mouvement " + couleur);
                 mvtIa = jouerIA(couleur);
                 src = mvtIa[0];
                 dst = mvtIa[1];
@@ -236,7 +240,7 @@ public class StuckWin {
      */
     char finPartie(char couleur){
         for (int i = 0; i<state.length ; i++){
-            for (int j = 0; j<state.length ; j++){
+            for (int j = 0; j<state[i].length ; j++){
                 if (state[i][j] == couleur){
                     if (possibleDests(couleur,i,j)[0] != "null" || possibleDests(couleur,i,j)[1] != "null" || possibleDests(couleur,i,j)[2] != "null"){
                         return 'N';
