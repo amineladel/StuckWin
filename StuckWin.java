@@ -20,10 +20,10 @@ public class StuckWin {
     char[][] state = {
             {'-', '-', '-', '-', 'R', 'R', 'R', 'R'},
             {'-', '-', '-', '.', 'R', 'R', 'R', 'R'},
-            {'-', '-', '.', '.', '.', 'R', 'R', 'R'},
-            {'-', 'B', 'B', '.', '.', '.', 'R', 'R'},
-            {'-', 'B', 'B', 'B', '.', '.', '.', '-'},
-            {'-', 'B', 'B', 'B', 'B', '.', '-', '-'},
+            {'-', '-', 'R', 'R', '.', 'R', 'R', 'R'},
+            {'-', 'B', 'B', 'R', 'R', '.', 'R', 'R'},
+            {'-', 'B', 'B', 'B', 'R', 'R', '.', '-'},
+            {'-', 'B', '.', 'B', 'B', 'R', '-', '-'},
             {'-', 'B', 'B', 'B', 'B', '-', '-', '-'},
     };
 
@@ -266,7 +266,7 @@ public class StuckWin {
             for (int j = 0; j<state[i].length ; j++){
                 if (state[i][j] == couleur){
                     String[] temp = possibleDests(couleur, i, j);
-                    if ((temp[0] != null && !temp[0].equals("null")) || (temp[1] != null && !temp[1].equals("null")) || (temp[2] != null && !temp[2].equals("null"))){
+                    if ((temp[0] != null)  || (temp[1] != null) || (temp[2] != null)) {
                         return 'N';
                     }
                 }
