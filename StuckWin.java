@@ -20,10 +20,10 @@ public class StuckWin {
     char[][] state = {
             {'-', '-', '-', '-', 'R', 'R', 'R', 'R'},
             {'-', '-', '-', '.', 'R', 'R', 'R', 'R'},
-            {'-', '-', 'R', 'R', '.', 'R', 'R', 'R'},
-            {'-', 'B', 'B', 'R', 'R', '.', 'R', 'R'},
-            {'-', 'B', 'B', 'B', 'R', 'R', '.', '-'},
-            {'-', 'B', '.', 'B', 'B', 'R', '-', '-'},
+            {'-', '-', '.', '.', '.', 'R', 'R', 'R'},
+            {'-', 'B', 'B', '.', '.', '.', 'R', 'R'},
+            {'-', 'B', 'B', 'B', '.', '.', '.', '-'},
+            {'-', 'B', 'B', 'B', 'B', '.', '-', '-'},
             {'-', 'B', 'B', 'B', 'B', '-', '-', '-'},
     };
 
@@ -90,9 +90,6 @@ public class StuckWin {
 
         }
 
-        String[] possibledest;
-        possibledest = possibleDests(couleur, lignesource, colonnesource);
-
         if (state[lignesource][colonnesource] != couleur) {
             return Result.BAD_COLOR;
         }
@@ -109,12 +106,32 @@ public class StuckWin {
             return Result.EXT_BOARD;
         }
 
+        String[] possibledest = possibleDests(couleur, lignesource, colonnesource);
+
+
+        if (!(possibledest[0]).equals(lcDest) && !(possibledest[1]).equals(lcDest) && !(possibledest[2]).equals(lcDest)) {
+            return Result.TOO_FAR;
+        }
+
 
         for (int i = 0; i < 3; i++) {
-            if (possibledest[i] == null){
-                possibledest[i] = "N";
+            if (possibledest[i].equals(lcDest)) {
+                if (mode == ModeMvt.REAL) {
+                    state[lignesource][colonnesource] = '.';
+                    state[lignedest][colonnedest] = couleur;
+                    return Result.OK;
+                } else {
+                    return Result.OK;
+                }
             }
-            if ((possibledest[i]).equals(lcDest)) {
+        }
+        return Result.EXIT;
+    }
+
+
+    /* A revoir cette fonction :
+    for (int i = 0; i < 3; i++) {
+            if (possibledest[i] == lcDest) {
                 if (mode == ModeMvt.REAL) {
                     state[lignesource][colonnesource] = '.';
                     state[lignedest][colonnedest] = couleur;
@@ -125,9 +142,7 @@ public class StuckWin {
             }
 
         }
-        return Result.EXIT;
-    }
-
+     */
 
 
     /**
@@ -139,7 +154,7 @@ public class StuckWin {
      * @return tableau des trois positions jouables par le pion (redondance possible sur les bords)
      */
     String[] possibleDests(char couleur, int idLettre, int idCol){
-        String[] resultat = new String[3];
+        String[] resultat = {"null", "null", "null"};
 
         if (couleur =='B'){
             if (state[idLettre-1][idCol] == '.')
@@ -159,7 +174,7 @@ public class StuckWin {
                 resultat[2] = "" +(lettre[idLettre]) + (idCol-1);
         }
 
-        //System.out.println(Arrays.toString(resultat));
+        System.out.println(Arrays.toString(resultat));
         return resultat;
     }
 
@@ -266,7 +281,7 @@ public class StuckWin {
             for (int j = 0; j<state[i].length ; j++){
                 if (state[i][j] == couleur){
                     String[] temp = possibleDests(couleur, i, j);
-                    if ((temp[0] != null)  || (temp[1] != null) || (temp[2] != null)) {
+                    if ((!temp[0].equals("null")) ||!temp[1].equals("null") || !temp[2].equals("null")){
                         return 'N';
                     }
                 }
