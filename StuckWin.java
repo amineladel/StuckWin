@@ -89,13 +89,16 @@ public class StuckWin {
             }
 
         }
+        if (lignedest >= state.length || lignedest <= -1 || colonnedest >= state[0].length || colonnedest < 0){
+            return Result.EXT_BOARD;
+        }
 
         if (state[lignesource][colonnesource] != couleur) {
             return Result.BAD_COLOR;
         }
 
         if (state[lignedest][colonnedest] == 'R' || state[lignedest][colonnedest] == 'B') {
-            return Result.DEST_NOT_FREE;
+                return Result.DEST_NOT_FREE;
         }
 
         if (state[lignesource][colonnesource] == '.') {
@@ -129,22 +132,6 @@ public class StuckWin {
     }
 
 
-    /* A revoir cette fonction :
-    for (int i = 0; i < 3; i++) {
-            if (possibledest[i] == lcDest) {
-                if (mode == ModeMvt.REAL) {
-                    state[lignesource][colonnesource] = '.';
-                    state[lignedest][colonnedest] = couleur;
-                    return Result.OK;
-                } else {
-                    return Result.OK;
-                }
-            }
-
-        }
-     */
-
-
     /**
      * Construit les trois chaînes représentant les positions accessibles
      * à partir de la position de départ [idLettre][idCol].
@@ -155,26 +142,36 @@ public class StuckWin {
      */
     String[] possibleDests(char couleur, int idLettre, int idCol){
         String[] resultat = {"null", "null", "null"};
-
-        if (couleur =='B'){
-            if (state[idLettre-1][idCol] == '.')
-                resultat[0] = "" + (lettre[idLettre-1]) + (idCol);
-            if (state[idLettre-1][idCol+1] == '.')
-                resultat[1] = "" + (lettre[idLettre-1]) + (idCol+1);
-            if (state[idLettre][idCol+1] == '.')
-                resultat[2] = "" + (lettre[idLettre]) + (idCol+1);
+        if (couleur =='B') {
+            if (idLettre-1 < state.length && idLettre - 1 > -1 && idCol < state[0].length && idCol > 0) {
+                if (state[idLettre - 1][idCol] == '.')
+                    resultat[0] = "" + (lettre[idLettre - 1]) + (idCol);
+            }
+            if (idLettre-1 < state.length && idLettre - 1 > -1 && idCol+1 < state[0].length && idCol+1 > 0) {
+                if (state[idLettre-1][idCol+1] == '.')
+                    resultat[1] = "" + (lettre[idLettre-1]) + (idCol+1);
+            }
+            if (idLettre < state.length && idLettre > -1 && idCol+1 < state[0].length && idCol +1 > 0) {
+                if (state[idLettre][idCol+1] == '.')
+                    resultat[2] = "" + (lettre[idLettre]) + (idCol+1);
+            }
         }
 
         else if (couleur =='R'){
-            if (state[idLettre+1][idCol] == '.')
-                resultat[0] = "" + (lettre[idLettre+1]) + (idCol);
-            if (state[idLettre+1][idCol-1] == '.')
-                resultat[1] = "" + (lettre[idLettre+1]) + (idCol-1);
-            if (state[idLettre][idCol-1] == '.')
-                resultat[2] = "" +(lettre[idLettre]) + (idCol-1);
+            if (idLettre+1 < state.length && idLettre + 1 > -1 && idCol < state[0].length && idCol > 0) {
+                if (state[idLettre+1][idCol] == '.')
+                    resultat[0] = "" + (lettre[idLettre+1]) + (idCol);
+            }
+            if (idLettre+1 < state.length && idLettre +1 > -1 && idCol-1 < state[0].length && idCol-1 > 0) {
+                if (state[idLettre+1][idCol-1] == '.')
+                    resultat[1] = "" + (lettre[idLettre+1]) + (idCol-1);
+            }
+            if (idLettre < state.length && idLettre > -1 && idCol-1 < state[0].length && idCol -1 > 0) {
+                if (state[idLettre][idCol-1] == '.')
+                    resultat[2] = "" +(lettre[idLettre]) + (idCol-1);
+            }
         }
 
-        System.out.println(Arrays.toString(resultat));
         return resultat;
     }
 
