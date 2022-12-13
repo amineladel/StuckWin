@@ -1,3 +1,4 @@
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -19,10 +20,10 @@ public class StuckWin {
 
     char[][] state = {
             {'-', '-', '-', '-', 'R', 'R', 'R', 'R'},
-            {'-', '-', '-', '.', 'R', 'R', 'R', 'R'},
-            {'-', '-', '.', '.', '.', 'R', 'R', 'R'},
-            {'-', 'B', 'B', '.', '.', '.', 'R', 'R'},
-            {'-', 'B', 'B', 'B', '.', '.', '.', '-'},
+            {'-', '-', '-', 'B', 'R', 'R', '.', 'R'},
+            {'-', '-', '.', 'B', 'B', 'R', 'R', 'R'},
+            {'-', 'B', 'B', '.', 'B', 'B', 'R', 'R'},
+            {'-', 'B', 'B', 'B', '.', 'B', 'B', '-'},
             {'-', 'B', 'B', 'B', 'B', '.', '-', '-'},
             {'-', 'B', 'B', 'B', 'B', '-', '-', '-'},
     };
@@ -93,6 +94,9 @@ public class StuckWin {
             return Result.EXT_BOARD;
         }
 
+        if (state[lignesource][colonnesource] == VIDE) {
+            return Result.EMPTY_SRC;
+        }
         if (state[lignesource][colonnesource] != couleur) {
             return Result.BAD_COLOR;
         }
@@ -101,9 +105,7 @@ public class StuckWin {
                 return Result.DEST_NOT_FREE;
         }
 
-        if (state[lignesource][colonnesource] == '.') {
-            return Result.EMPTY_SRC;
-        }
+
 
         if (state[lignedest][colonnedest] == '-' || colonnedest>state[0].length) {
             return Result.EXT_BOARD;
@@ -120,7 +122,7 @@ public class StuckWin {
         for (int i = 0; i < 3; i++) {
             if (possibledest[i].equals(lcDest)) {
                 if (mode == ModeMvt.REAL) {
-                    state[lignesource][colonnesource] = '.';
+                    state[lignesource][colonnesource] = VIDE;
                     state[lignedest][colonnedest] = couleur;
                     return Result.OK;
                 } else {
@@ -141,35 +143,59 @@ public class StuckWin {
      * @return tableau des trois positions jouables par le pion (redondance possible sur les bords)
      */
     String[] possibleDests(char couleur, int idLettre, int idCol){
-        String[] resultat = {"null", "null", "null"};
+        String[] resultat = new String[3];
         if (couleur =='B') {
             if (idLettre-1 < state.length && idLettre - 1 > -1 && idCol < state[0].length && idCol > 0) {
                 if (state[idLettre - 1][idCol] == '.')
                     resultat[0] = "" + (lettre[idLettre - 1]) + (idCol);
+                else {
+                    resultat[0] = "" + (lettre[idLettre]) + (idCol);
+                }
             }
+
             if (idLettre-1 < state.length && idLettre - 1 > -1 && idCol+1 < state[0].length && idCol+1 > 0) {
                 if (state[idLettre-1][idCol+1] == '.')
                     resultat[1] = "" + (lettre[idLettre-1]) + (idCol+1);
+                else {
+                    resultat[1] = "" + (lettre[idLettre]) + (idCol);
+                }
             }
+
             if (idLettre < state.length && idLettre > -1 && idCol+1 < state[0].length && idCol +1 > 0) {
                 if (state[idLettre][idCol+1] == '.')
                     resultat[2] = "" + (lettre[idLettre]) + (idCol+1);
+                else {
+                    resultat[2] = "" + (lettre[idLettre]) + (idCol);
+                }
             }
+
         }
 
         else if (couleur =='R'){
             if (idLettre+1 < state.length && idLettre + 1 > -1 && idCol < state[0].length && idCol > 0) {
                 if (state[idLettre+1][idCol] == '.')
                     resultat[0] = "" + (lettre[idLettre+1]) + (idCol);
+                else {
+                    resultat[0] = "" + (lettre[idLettre]) + (idCol);
+                }
             }
+
             if (idLettre+1 < state.length && idLettre +1 > -1 && idCol-1 < state[0].length && idCol-1 > 0) {
                 if (state[idLettre+1][idCol-1] == '.')
                     resultat[1] = "" + (lettre[idLettre+1]) + (idCol-1);
+                else {
+                    resultat[1] = "" + (lettre[idLettre]) + (idCol);
+                }
             }
+
             if (idLettre < state.length && idLettre > -1 && idCol-1 < state[0].length && idCol -1 > 0) {
                 if (state[idLettre][idCol-1] == '.')
                     resultat[2] = "" +(lettre[idLettre]) + (idCol-1);
+                else {
+                    resultat[2] = "" + (lettre[idLettre]) + (idCol);
+                }
             }
+
         }
 
         return resultat;
@@ -278,8 +304,10 @@ public class StuckWin {
             for (int j = 0; j<state[i].length ; j++){
                 if (state[i][j] == couleur){
                     String[] temp = possibleDests(couleur, i, j);
-                    if ((!temp[0].equals("null")) ||!temp[1].equals("null") || !temp[2].equals("null")){
-                        return 'N';
+                    for (int k = 0; k < temp.length; k++) {
+                        if (deplace(couleur, ("" + lettre[i]+ j), temp[k], ModeMvt.SIMU) == Result.OK){
+                            return 'N';
+                        }
                     }
                 }
             }
