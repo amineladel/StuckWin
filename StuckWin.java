@@ -19,14 +19,24 @@ public class StuckWin {
     // 'B'=bleu 'R'=rouge '.'=vide '-'=n'existe pas
 
     char[][] state = {
-            {'-', '-', '-', '-', 'R', 'R', 'R', 'R'},
-            {'-', '-', '-', 'B', 'R', 'R', '.', 'R'},
-            {'-', '-', '.', 'B', 'B', 'R', 'R', 'R'},
-            {'-', 'B', 'B', '.', 'B', 'B', 'R', 'R'},
-            {'-', 'B', 'B', 'B', '.', 'B', 'B', '-'},
+            {'-', '-', '-', '-', 'R', 'B', 'R', 'R'},
+            {'-', '-', '-', '.', 'R', '.', 'R', 'R'},
+            {'-', '-', '.', '.', '.', 'R', 'R', 'R'},
+            {'-', 'B', 'B', '.', '.', '.', 'R', 'R'},
+            {'-', 'B', 'B', 'B', '.', '.', '.', '-'},
             {'-', 'B', 'B', 'B', 'B', '.', '-', '-'},
             {'-', 'B', 'B', 'B', 'B', '-', '-', '-'},
     };
+
+    /*
+            {'-', '-', '-', '-', 'R', 'B', 'R', 'R'},
+            {'-', '-', '-', '.', 'R', '.', 'R', 'R'},
+            {'-', '-', '.', '.', '.', 'R', 'R', 'R'},
+            {'-', 'B', 'B', '.', '.', '.', 'R', 'R'},
+            {'-', 'B', 'B', 'B', '.', '.', '.', '-'},
+            {'-', 'B', 'B', 'B', 'B', '.', '-', '-'},
+            {'-', 'B', 'B', 'B', 'B', '-', '-', '-'},
+     */
 
     /* test_bleu_vicroire
     char[][] state = {
@@ -105,19 +115,17 @@ public class StuckWin {
                 return Result.DEST_NOT_FREE;
         }
 
-
-
         if (state[lignedest][colonnedest] == '-' || colonnedest>state[0].length) {
             return Result.EXT_BOARD;
         }
 
         String[] possibledest = possibleDests(couleur, lignesource, colonnesource);
 
-
         if (!(possibledest[0]).equals(lcDest) && !(possibledest[1]).equals(lcDest) && !(possibledest[2]).equals(lcDest)) {
             return Result.TOO_FAR;
         }
 
+        // System.out.println(possibledest[0] + possibledest[1] + possibledest[2]);
 
         for (int i = 0; i < 3; i++) {
             if (possibledest[i].equals(lcDest)) {
@@ -198,6 +206,11 @@ public class StuckWin {
 
         }
 
+        for (int i = 0 ; i < resultat.length ; i++) {
+            if (resultat[i] == null) {
+                resultat[i] = "" + (lettre[idLettre]) + (idCol);
+            }
+        }
         return resultat;
     }
 
