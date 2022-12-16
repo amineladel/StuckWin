@@ -34,6 +34,13 @@ Mouvement R
 C5->C4
 status : OK partie : N
 
+On cherche à rentrer une valeur impossible, il y a l’erreur EXT_BOARD
+Mouvement B
+D2C3
+CC
+D2C3->CC
+status : EXT_BOARD partie : N
+
 On cherche à aller sur une case qui est déjà occupé par une autre couleur,
 destination est pas possible, on a donc bien l’erreur DEST_NOT_FREE :
 Mouvement B

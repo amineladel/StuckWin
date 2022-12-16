@@ -336,17 +336,21 @@ public class StuckWin {
         String[] mvtIa;
         switch(couleur) {
             case 'B':
-                System.err.println("Mouvement " + couleur);
+                System.out.println("Mouvement " + couleur);
+                //System.err.println("Mouvement " + couleur);
                 src = input.next();
                 dst = input.next();
-                System.err.println(src + "->" + dst);
+                System.out.println(src + "->" + dst);
+                //System.err.println(src + "->" + dst);
                 break;
             case 'R':
                 // Cela permet de faire jouer le bleu et le rouge par un utilisateur
-                System.err.println("Mouvement " + couleur);
+                System.out.println("Mouvement " + couleur);
+                //System.err.println("Mouvement " + couleur);
                 src = input.next();
                 dst = input.next();
-                System.err.println(src + "->" + dst);
+                System.out.println(src + "->" + dst);
+                //System.err.println(src + "->" + dst);
                 break;
                 // Nous ferons la version avec l’IA dans la prochaine SAE
                 /*
@@ -422,13 +426,15 @@ public class StuckWin {
                     return;
                 status = jeu.deplace(curCouleur, src, dest, ModeMvt.REAL);
                 partie = jeu.finPartie(nextCouleur);
-                System.err.println("status : "+status + " partie : " + partie);
+                System.out.println("status : "+status + " partie : " + partie);
+                //System.err.println("status : "+status + " partie : " + partie);
             } while(status != Result.OK && partie=='N');
             tmp = curCouleur;
             curCouleur = nextCouleur;
             nextCouleur = tmp;
             cpt ++;
         } while(partie =='N'); // TODO affiche vainqueur
-        System.err.printf("Victoire : " + partie + " (" + (cpt/2) + " coups)");
+        System.out.printf("Victoire : " + partie + " (" + (cpt/2) + " coups)");
+        //System.err.printf("Victoire : " + partie + " (" + (cpt/2) + " coups)");
     }
 }
