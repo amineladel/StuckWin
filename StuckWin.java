@@ -6,7 +6,10 @@ import java.util.Scanner;
 // à enlever à la fin
 import java.util.Arrays;
 
-
+/**
+ Membre du groupe : Lucas BESSON et Amine Ladel
+ GROUPE de classe : C2
+ */
 public class StuckWin {
     static final Scanner input = new Scanner(System.in);
     private static final double BOARD_SIZE = 7;
@@ -19,12 +22,12 @@ public class StuckWin {
     // 'B'=bleu 'R'=rouge '.'=vide '-'=n'existe pas
 
     char[][] state = {
-            {'-', '-', '-', '-', 'R', 'B', 'R', 'R'},
-            {'-', '-', '-', '.', 'R', '.', 'R', 'R'},
-            {'-', '-', '.', '.', '.', 'R', 'R', 'R'},
-            {'-', 'B', 'B', '.', '.', '.', 'R', 'R'},
-            {'-', 'B', 'B', 'B', '.', '.', '.', '-'},
-            {'-', 'B', 'B', 'B', 'B', '.', '-', '-'},
+            {'-', '-', '-', '-', 'R', 'R', 'R', 'R'},
+            {'-', '-', '-', '.', 'R', 'R', 'R', 'R'},
+            {'-', '-', 'R', 'R', '.', 'R', 'R', 'R'},
+            {'-', 'B', 'B', 'R', 'R', '.', 'R', 'R'},
+            {'-', 'B', 'B', 'B', 'R', 'R', '.', '-'},
+            {'-', 'B', '.', 'B', 'B', 'R', '-', '-'},
             {'-', 'B', 'B', 'B', 'B', '-', '-', '-'},
     };
 
@@ -73,6 +76,8 @@ public class StuckWin {
 
      */
 
+    // Tableau de caratères permettant l'affichage des pions.
+    // -> Utilisé dans la fonction affiche.
     char[] lettre = {'A','B','C','D','E','F','G'};
 
 
@@ -87,6 +92,9 @@ public class StuckWin {
          * @return enum {OK, BAD_COLOR, DEST_NOT_FREE, EMPTY_SRC, TOO_FAR, EXT_BOARD, EXIT} selon le déplacement
          */
     Result deplace(char couleur, String lcSource, String lcDest,  ModeMvt mode) {
+        // Cela permet de récupérer les valeurs de lcSourc et lcDest et
+        // de les décomposer afin d'obtenir séparément le numéro de ligne
+        // ainsi que le numéro de colonne, tous cela en entier (int)
         int lignesource = 0;
         int lignedest = 0;
         int colonnesource = Character.getNumericValue(lcSource.charAt(1));
@@ -100,33 +108,56 @@ public class StuckWin {
             }
 
         }
-        if (lignedest >= state.length || lignedest <= -1 || colonnedest >= state[0].length || colonnedest < 0){
+        // Cela permet de vérifier que l'utilisateur sort pas du tableau :
+        // Si il rentre une valeur supérieur à la taille maxiumum
+        // des ligne et un valeur inférieur à -1 cela renvoie EXT_BOARD
+        // Nous faisions les même vérifiction pour les colonne.
+        // La condition EXT_BOARD avec le caratère '-' que l'on vérifie plus bas
+        // ne suffit pas, l'utilisateur peut aller plus loins que cela et cela
+        // ferais carcher les programme. Grâce à cette verification il y aura pas
+        // ce souci.
+        if (lignedest >= state.length || lignedest <= -1 ||
+                colonnedest >= state[0].length || colonnedest < 0){
             return Result.EXT_BOARD;
         }
 
+        //Vérifier que l'utilisateur ne fait jouer une case vide à savoir un '.'
         if (state[lignesource][colonnesource] == VIDE) {
             return Result.EMPTY_SRC;
         }
+        // Vérifier que c'est bien la bonne couleur qui joue
         if (state[lignesource][colonnesource] != couleur) {
             return Result.BAD_COLOR;
         }
 
-        if (state[lignedest][colonnedest] == 'R' || state[lignedest][colonnedest] == 'B') {
+        // Vérifier que l'on joue pas sur une case qui est déjà prise par
+        // une autre couleur
+        if (state[lignedest][colonnedest] == 'R' ||
+                state[lignedest][colonnedest] == 'B') {
                 return Result.DEST_NOT_FREE;
         }
 
-        if (state[lignedest][colonnedest] == '-' || colonnedest>state[0].length) {
+        // Vérifier que l'on sors pas du tableau en allant sur une case
+        // représenté par '-'
+        if (state[lignedest][colonnedest] == '-' ||
+                colonnedest>state[0].length) {
             return Result.EXT_BOARD;
         }
 
+        // On met dans un tableau de string le retour de la fonction possibleDests
         String[] possibledest = possibleDests(couleur, lignesource, colonnesource);
 
-        if (!(possibledest[0]).equals(lcDest) && !(possibledest[1]).equals(lcDest) && !(possibledest[2]).equals(lcDest)) {
+        // Vérifier que l'utilisateur ne va pas trop loin : on vérifie donc
+        // que la destination choisi elle est bien dans les destinations possibles.
+        // le cas échéant, on renvoie TOO_FAR.
+        if (!(possibledest[0]).equals(lcDest) &&
+                !(possibledest[1]).equals(lcDest) &&
+                !(possibledest[2]).equals(lcDest)) {
             return Result.TOO_FAR;
         }
 
-        // System.out.println(possibledest[0] + possibledest[1] + possibledest[2]);
-
+        // On parcourt le tableau de string crée plus haut, si la valeur
+        // de destination est dedans on fait le mouvement
         for (int i = 0; i < 3; i++) {
             if (possibledest[i].equals(lcDest)) {
                 if (mode == ModeMvt.REAL) {
@@ -151,17 +182,27 @@ public class StuckWin {
      * @return tableau des trois positions jouables par le pion (redondance possible sur les bords)
      */
     String[] possibleDests(char couleur, int idLettre, int idCol){
+        // Création d'une tableau de String de 3 élements
         String[] resultat = new String[3];
+        // Vérifation pour les bleus des destionations possible
         if (couleur =='B') {
-            if (idLettre-1 < state.length && idLettre - 1 > -1 && idCol < state[0].length && idCol > 0) {
+            // On vérifie si on n'a pas rentrer une lettre inférieur à -1,
+            // et si on a pas rentré une ligne qui sors du tableau.
+            // On fait de même pour les colonnes sauf que l'on vérifie
+            // si elle est bien supérieur à 0
+            if (idLettre-1 < state.length && idLettre - 1 > -1 &&
+                    idCol < state[0].length && idCol > 0) {
                 if (state[idLettre - 1][idCol] == '.')
                     resultat[0] = "" + (lettre[idLettre - 1]) + (idCol);
+                // Si il y a la destination est pas possible,
+                // on revoit la position de lui-même
                 else {
                     resultat[0] = "" + (lettre[idLettre]) + (idCol);
                 }
             }
 
-            if (idLettre-1 < state.length && idLettre - 1 > -1 && idCol+1 < state[0].length && idCol+1 > 0) {
+            if (idLettre-1 < state.length && idLettre - 1 > -1 &&
+                    idCol+1 < state[0].length && idCol+1 > 0) {
                 if (state[idLettre-1][idCol+1] == '.')
                     resultat[1] = "" + (lettre[idLettre-1]) + (idCol+1);
                 else {
@@ -169,7 +210,8 @@ public class StuckWin {
                 }
             }
 
-            if (idLettre < state.length && idLettre > -1 && idCol+1 < state[0].length && idCol +1 > 0) {
+            if (idLettre < state.length && idLettre > -1 &&
+                    idCol+1 < state[0].length && idCol +1 > 0) {
                 if (state[idLettre][idCol+1] == '.')
                     resultat[2] = "" + (lettre[idLettre]) + (idCol+1);
                 else {
@@ -178,9 +220,10 @@ public class StuckWin {
             }
 
         }
-
+        // Vérifation pour les rouges des destionations possible
         else if (couleur =='R'){
-            if (idLettre+1 < state.length && idLettre + 1 > -1 && idCol < state[0].length && idCol > 0) {
+            if (idLettre+1 < state.length && idLettre + 1 > -1 &&
+                    idCol < state[0].length && idCol > 0) {
                 if (state[idLettre+1][idCol] == '.')
                     resultat[0] = "" + (lettre[idLettre+1]) + (idCol);
                 else {
@@ -188,7 +231,8 @@ public class StuckWin {
                 }
             }
 
-            if (idLettre+1 < state.length && idLettre +1 > -1 && idCol-1 < state[0].length && idCol-1 > 0) {
+            if (idLettre+1 < state.length && idLettre +1 > -1 &&
+                    idCol-1 < state[0].length && idCol-1 > 0) {
                 if (state[idLettre+1][idCol-1] == '.')
                     resultat[1] = "" + (lettre[idLettre+1]) + (idCol-1);
                 else {
@@ -196,7 +240,8 @@ public class StuckWin {
                 }
             }
 
-            if (idLettre < state.length && idLettre > -1 && idCol-1 < state[0].length && idCol -1 > 0) {
+            if (idLettre < state.length && idLettre > -1 &&
+                    idCol-1 < state[0].length && idCol -1 > 0) {
                 if (state[idLettre][idCol-1] == '.')
                     resultat[2] = "" +(lettre[idLettre]) + (idCol-1);
                 else {
@@ -206,6 +251,8 @@ public class StuckWin {
 
         }
 
+        // Cela permet de convertir si il y en a, les valeurs null en renvoyant
+        // la position de lui-même.
         for (int i = 0 ; i < resultat.length ; i++) {
             if (resultat[i] == null) {
                 resultat[i] = "" + (lettre[idLettre]) + (idCol);
@@ -221,18 +268,26 @@ public class StuckWin {
 
     public void affiche() {
         System.out.println();
+        // On parcourt le tableau en diagonale pour le lire
         for (int i = state.length-1; i >= 0; i--) {
             System.out.print("  ");
             for (int j = 0; j < 7; j++) {
                 if (j >= i) {
+                    // On mets les R en rouge et affiche les lettres (A,B,C..) avec
+                    // le tableau créé tout au début du programme. Enfin on fait
+                    // un espace nésessaire pour l'affichage
                     if(state[j-i][j+1] == 'R')
-                        System.out.print(ConsoleColors.RED_BACKGROUND + lettre[j-i] + (j+1) + ConsoleColors.RESET + "  " );
+                        System.out.print(ConsoleColors.RED_BACKGROUND +
+                                lettre[j-i] + (j+1) + ConsoleColors.RESET + "  " );
+                    // On fait la même chose que le précédent sauf pour les '.'
                     else if (state[j-i][j+1] == '.')
-                        System.out.print(ConsoleColors.WHITE_BACKGROUND + lettre[j-i] + (j+1) + ConsoleColors.RESET + "  " );
+                        System.out.print(ConsoleColors.WHITE_BACKGROUND +
+                                lettre[j-i] + (j+1) + ConsoleColors.RESET + "  " );
                     else if (state[j-i][j+1] == '-')
                         System.out.print( "    " );
                     else if (state[j-i][j+1] == 'B')
-                        System.out.print(ConsoleColors.BLUE_BACKGROUND + lettre[j-i] + (j+1) + ConsoleColors.RESET + "  " );
+                        System.out.print(ConsoleColors.BLUE_BACKGROUND +
+                                lettre[j-i] + (j+1) + ConsoleColors.RESET + "  " );
                 } else {
                     System.out.print("  ");
                 }
@@ -241,17 +296,25 @@ public class StuckWin {
         }
 
         for (int i = 0; i <= state.length; i++) {
+            // On lit le tableau encore en diagonale dans le bon sens.
+            // On a choisi de prendre une variable temporaire
+            // Celle-ci fera les espaces nécessaires et affichera
+            // la diagonale complète une fois qu'elle sera complètement lue
+            // PS : Sans la variable, les espaces ne se faisait pas correctement
             String temp = "";
             for (int j = 0; j < 7; j++) {
                 if (i + j < state.length) {
                     if(state[j+i][j] == 'R')
-                        temp += (ConsoleColors.RED_BACKGROUND + lettre[j+i] + j + ConsoleColors.RESET + "  ");
+                        temp += (ConsoleColors.RED_BACKGROUND +
+                                lettre[j+i] + j + ConsoleColors.RESET + "  ");
                     else if (state[j+i][j] == '.')
-                        temp += (ConsoleColors.WHITE_BACKGROUND + lettre[j+i] + j + ConsoleColors.RESET + "  ");
+                        temp += (ConsoleColors.WHITE_BACKGROUND +
+                                lettre[j+i] + j + ConsoleColors.RESET + "  ");
                     else if (state[j+i][j] == '-')
                         temp += ("    ");
                     else if (state[j+i][j] == 'B')
-                        temp += (ConsoleColors.BLUE_BACKGROUND + lettre[j+i] + j + ConsoleColors.RESET + "  ");
+                        temp += (ConsoleColors.BLUE_BACKGROUND +
+                                lettre[j+i] + j + ConsoleColors.RESET + "  ");
                 } else {
                     System.out.print("  ");
                 }
@@ -285,17 +348,19 @@ public class StuckWin {
         String[] mvtIa;
         switch(couleur) {
             case 'B':
-                System.out.println("Mouvement " + couleur);
+                System.err.println("Mouvement " + couleur);
                 src = input.next();
                 dst = input.next();
-                System.out.println(src + "->" + dst);
+                System.err.println(src + "->" + dst);
                 break;
             case 'R':
+                // Cela permet de faire jouer le bleu et le rouge par un utilisateur
                 System.out.println("Mouvement " + couleur);
                 src = input.next();
                 dst = input.next();
-                System.out.println(src + "->" + dst);
+                System.err.println(src + "->" + dst);
                 break;
+                // Nous ferons la version avec l’IA dans la prochaine SAE
                 /*
                 System.out.println("Mouvement " + couleur);
                 mvtIa = jouerIA(couleur);
@@ -313,18 +378,30 @@ public class StuckWin {
      * @return
      */
     char finPartie(char couleur){
+        // on parcours l'ensemble du tableau
         for (int i = 0; i<state.length ; i++){
             for (int j = 0; j<state[i].length ; j++){
                 if (state[i][j] == couleur){
+                    // On est dans un tableau de string comme plus haut
+                    // les valeurs retourner de possibleDests
                     String[] temp = possibleDests(couleur, i, j);
+                    // on parcours ses valeurs
                     for (int k = 0; k < temp.length; k++) {
-                        if (deplace(couleur, ("" + lettre[i]+ j), temp[k], ModeMvt.SIMU) == Result.OK){
+                        // On essaye de faire avec le mode de simulation
+                        // un déplacement. Si celui-ci est possible,
+                        // c'est que la partie n'est pas fini
+                        if (deplace(couleur,
+                                ("" + lettre[i]+ j),
+                                temp[k],
+                                ModeMvt.SIMU) == Result.OK){
+                            // On retourne que la partie est toujours en cours
                             return 'N';
                         }
                     }
                 }
             }
         }
+        // Si on retourne pas N alors on retourne la couleur du gagnant.
         return couleur;
     }
 
@@ -356,7 +433,7 @@ public class StuckWin {
                     return;
                 status = jeu.deplace(curCouleur, src, dest, ModeMvt.REAL);
                 partie = jeu.finPartie(nextCouleur);
-                System.out.println("status : "+status + " partie : " + partie);
+                System.err.println("status : "+status + " partie : " + partie);
             } while(status != Result.OK && partie=='N');
             tmp = curCouleur;
             curCouleur = nextCouleur;
