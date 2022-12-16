@@ -1,0 +1,106 @@
+Grille de départ :
+
+char[][] state = {
+            {'-', '-', '-', '-', 'R', 'R', 'R', 'R'},
+            {'-', '-', '-', '.', 'R', 'R', 'R', 'R'},
+            {'-', '-', '.', '.', '.', 'R', 'R', 'R'},
+            {'-', 'B', 'B', '.', '.', '.', 'R', 'R'},
+            {'-', 'B', 'B', 'B', '.', '.', '.', '-'},
+            {'-', 'B', 'B', 'B', 'B', '.', '-', '-'},
+            {'-', 'B', 'B', 'B', 'B', '-', '-', '-'},
+    };
+
+On testera ici la fin de partie avec la victoire simple des rouges
+Nous ne ferons pas d'erreur volontaire le jeu de test 03 sera dédié pour cela.
+
+Mouvement B
+D2->D3
+status : OK partie : N
+Mouvement R
+B4->B3
+status : OK partie : N
+Mouvement B
+E3->E4
+status : OK partie : N
+Mouvement R
+D6->D5
+status : OK partie : N
+Mouvement B
+F4->F5
+status : OK partie : N
+Mouvement R
+B5->B4
+status : OK partie : N
+Mouvement B
+D1->D2
+status : OK partie : N
+Mouvement R
+B6->B5
+status : OK partie : N
+Mouvement B
+E2->E3
+status : OK partie : N
+Mouvement R
+D7->D6
+status : OK partie : N
+Mouvement B
+F3->F4
+status : OK partie : N
+Mouvement R
+A6->B6
+status : OK partie : N
+Mouvement B
+D3->C4
+status : OK partie : N
+Mouvement R
+C7->D7
+status : OK partie : N
+Mouvement B
+D2->C3
+status : OK partie : N
+Mouvement R
+D7->E6
+status : OK partie : N
+Mouvement B
+E4->D4
+status : OK partie : N
+Mouvement R
+B7->C7
+status : OK partie : N
+Mouvement B
+F5->E5
+status : OK partie : N
+Mouvement R
+A7->A6
+status : OK partie : N
+Mouvement B
+F4->F5
+status : OK partie : N
+Mouvement R
+C7->D7
+status : OK partie : N
+Mouvement B
+E1->D2
+status : OK partie : N
+Mouvement R
+D5->E4
+status : OK partie : N
+Mouvement B
+G3->F3
+status : OK partie : N
+Mouvement R
+D6->D5
+status : OK partie : N
+Mouvement B
+G4->F4
+status : OK partie : N
+Mouvement R
+D7->D6
+status : OK partie : N
+Mouvement B
+D2->C2
+status : OK partie : R
+Victoire : R (14 coups)
+
+La fin de partie fonctionne bien il affiche le bon vainqueur (Rouge)
+avec le bon nombre de coups.

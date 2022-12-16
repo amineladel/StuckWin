@@ -1,0 +1,267 @@
+Grille de départ :
+
+char[][] state = {
+            {'-', '-', '-', '-', 'R', 'R', 'R', 'R'},
+            {'-', '-', '-', '.', 'R', 'R', 'R', 'R'},
+            {'-', '-', '.', '.', '.', 'R', 'R', 'R'},
+            {'-', 'B', 'B', '.', '.', '.', 'R', 'R'},
+            {'-', 'B', 'B', 'B', '.', '.', '.', '-'},
+            {'-', 'B', 'B', 'B', 'B', '.', '-', '-'},
+            {'-', 'B', 'B', 'B', 'B', '-', '-', '-'},
+    };
+
+On testera ici la fin de partie avec la victoire simple des bleu
+Cette parti sera plus long que la 01, nous chercheront à faire bouger beaucoup
+les pions afin de vérifier que le programme fonctionne bien lorsque
+il y a des mélange de point un peu partout.
+
+Mouvement B
+D2->C2
+status : OK partie : N
+Mouvement R
+B4->B3
+status : OK partie : N
+Mouvement B
+E3->D3
+status : OK partie : N
+Mouvement R
+B5->B4
+status : OK partie : N
+Mouvement B
+E2->E3
+status : OK partie : N
+Mouvement R
+C5->C4
+status : OK partie : N
+Mouvement B
+E3->E4
+status : OK partie : N
+Mouvement R
+D6->D5
+status : OK partie : N
+Mouvement B
+F4->F5
+status : OK partie : N
+Mouvement R
+B6->B5
+status : OK partie : N
+Mouvement B
+C2->C3
+status : OK partie : N
+Mouvement R
+D7->D6
+status : OK partie : N
+Mouvement B
+D3->D4
+status : OK partie : N
+Mouvement R
+B7->B6
+status : OK partie : N
+Mouvement B
+E4->E5
+status : OK partie : N
+Mouvement R
+C6->C5
+status : OK partie : N
+Mouvement B
+F2->E3
+status : OK partie : N
+Mouvement R
+C7->D7
+status : OK partie : N
+Mouvement B
+D1->C2
+status : OK partie : N
+Mouvement R
+B6->C6
+status : OK partie : N
+Mouvement B
+F3->E4
+status : OK partie : N
+Mouvement R
+D6->E6
+status : OK partie : N
+Mouvement B
+G3->F4
+status : OK partie : N
+Mouvement R
+D7->D6
+status : OK partie : N
+Mouvement B
+E1->D2
+status : OK partie : N
+Mouvement R
+A6->B6
+status : OK partie : N
+Mouvement B
+F1->E2
+status : OK partie : N
+Mouvement R
+A7->A6
+status : OK partie : N
+Mouvement B
+G2->F3
+status : OK partie : N
+Mouvement R
+C4->D3
+status : OK partie : N
+Mouvement B
+G1->F2
+status : OK partie : N
+Mouvement R
+C5->C4
+status : OK partie : N
+Mouvement B
+D4->C5
+status : OK partie : N
+Mouvement R
+D5->D4
+status : OK partie : N
+Mouvement B
+E5->D5
+status : OK partie : N
+Mouvement R
+E6->E5
+status : OK partie : N
+Mouvement B
+F5->E6
+status : OK partie : N
+Mouvement R
+E5->F5
+status : OK partie : N
+Mouvement B
+E6->D7
+status : OK partie : N
+Mouvement R
+D6->E6
+status : OK partie : N
+Mouvement B
+E4->E5
+status : OK partie : N
+Mouvement R
+C6->D6
+status : OK partie : N
+Mouvement B
+F4->E4
+status : OK partie : N
+Mouvement R
+F5->F4
+status : OK partie : N
+Mouvement B
+D7->C7
+status : OK partie : N
+Mouvement R
+F4->G3
+status : OK partie : N
+Mouvement B
+C7->B7
+status : OK partie : N
+Mouvement R
+E6->F5
+status : OK partie : N
+Mouvement B
+B7->A7
+status : OK partie : N
+Mouvement R
+F5->F4
+status : OK partie : N
+Mouvement B
+G4->F5
+status : OK partie : N
+Mouvement R
+B6->C6
+status : OK partie : N
+Mouvement B
+C5->B6
+status : OK partie : N
+Mouvement R
+D6->E6
+status : OK partie : N
+Mouvement B
+D5->C5
+status : OK partie : N
+Mouvement R
+C6->D6
+status : OK partie : N
+Mouvement B
+B6->B7
+status : OK partie : N
+Mouvement R
+D6->D5
+status : OK partie : N
+Mouvement B
+C5->B6
+status : OK partie : N
+Mouvement R
+G3->G2
+status : OK partie : N
+Mouvement B
+E5->D6
+status : OK partie : N
+Mouvement R
+E6->E5
+status : OK partie : N
+Mouvement B
+D6->C7
+status : OK partie : N
+Mouvement R
+G2->G1
+status : OK partie : N
+Mouvement B
+F5->E6
+status : OK partie : N
+Mouvement R
+F4->G3
+status : OK partie : N
+Mouvement B
+E6->D7
+status : OK partie : N
+Mouvement R
+G3->G2
+status : OK partie : N
+Mouvement B
+F3->F4
+status : OK partie : N
+Mouvement R
+E5->F5
+status : OK partie : N
+Mouvement B
+F4->E5
+status : OK partie : N
+Mouvement R
+F5->F4
+status : OK partie : N
+Mouvement B
+E5->D6
+status : OK partie : N
+Mouvement R
+F4->F3
+status : OK partie : N
+Mouvement B
+D6->C6
+status : OK partie : N
+Mouvement R
+B5->C5
+status : OK partie : N
+Mouvement B
+E4->E5
+status : OK partie : N
+Mouvement R
+D4->E4
+status : OK partie : N
+Mouvement B
+E5->E6
+status : OK partie : N
+Mouvement R
+C5->D4
+status : OK partie : N
+Mouvement B
+E6->D6
+status : OK partie : N
+Mouvement R
+D5->E5
+status : OK partie : B
+Victoire : B (41 coups)
+
+La fin de partie fonctionne bien il affiche le bon vainqueur (Bleu)
+avec le bon nombre de coups.

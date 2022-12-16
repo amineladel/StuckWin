@@ -1,0 +1,228 @@
+Grille de départ :
+char[][] state = {
+            {'-', '-', '-', '-', 'R', 'R', 'R', 'R'},
+            {'-', '-', '-', '.', 'R', 'R', 'R', 'R'},
+            {'-', '-', '.', '.', '.', 'R', 'R', 'R'},
+            {'-', 'B', 'B', '.', '.', '.', 'R', 'R'},
+            {'-', 'B', 'B', 'B', '.', '.', '.', '-'},
+            {'-', 'B', 'B', 'B', 'B', '.', '-', '-'},
+            {'-', 'B', 'B', 'B', 'B', '-', '-', '-'},
+    };
+
+On testera ici les différentes erreur qu'un utilisateur pourrait faire et
+nous verrons que notre programme ne crache jamais, les gère toutes et renvoie
+les bonnes erreurs.
+
+Mouvement B
+D2->D3
+status : OK partie : N
+
+On fait jouer une case vide, on a donc l'erreur EMPTY_SRC:
+Mouvement R
+C4->D4
+status : EMPTY_SRC partie : N
+
+La source est la destination sont juste il y a donc pas d'erreur
+et le déplacement se fait bien :
+Mouvement R
+C5->C4
+status : OK partie : N
+
+On cherche à aller sur une case qui est déjà occupé par une autre couleur,
+destination est pas possible, on a donc bien l’erreur DEST_NOT_FREE :
+Mouvement B
+D3->C4
+status : DEST_NOT_FREE partie : N
+
+On va trop loin, les règles du jeu stipule que l'on peut aller uniquement
+au maximum à une case plus loin et non deux comme dans ce cas,
+il y donc l'erreur TOO_FAR :
+Mouvement B
+D3->D5
+status : TOO_FAR partie : N
+
+Mouvement B
+D3->D4
+status : OK partie : N
+
+On cherche à jouer une couleur qui n'existe pas,
+il y a donc bien l'erreur BAD_COLOR:
+Mouvement R
+44->44
+status : BAD_COLOR partie : N
+
+Mouvement R
+B4->B3
+status : OK partie : N
+
+On fait jouer les rouges à la place des bleus, il y a donc l’erreur BAD_COLOR :
+Mouvement B
+C4->D3
+status : BAD_COLOR partie : N
+
+La couleur de source est la couleur de destination n'existe pas,
+il y a donc l'erreur BAD_COLOR :
+Mouvement B
+Z44->Y77
+status : BAD_COLOR partie : N
+
+Mouvement B
+E2->D3
+status : OK partie : N
+
+Mouvement R
+C4->C3
+status : OK partie : N
+
+La destination est trop loin on sort donc du tableau, on à l'erreur EXT_BOARD:
+Mouvement B
+D1->C22
+status : EXT_BOARD partie : N
+
+Mouvement B
+D1->C2
+status : OK partie : N
+
+Mouvement R
+B5->B4
+status : OK partie : N
+
+Mouvement B
+E3->E4
+status : OK partie : N
+
+Mouvement R
+D6->D5
+status : OK partie : N
+
+Mouvement B
+F4->F5
+status : OK partie : N
+
+Ici encore on fait jouer la mauvaise couleur il y a donc l'erreur BAD_COLOR
+Mouvement R
+E1->A1
+status : BAD_COLOR partie : N
+
+Mouvement R
+B4->C4
+status : OK partie : N
+
+Mouvement B
+F3->F4
+status : OK partie : N
+
+On cherche à faire jouer une case vide sur une autre case pour ce cas la occuper,
+on à bien l’erreur EMPTY_SRC
+Mouvement R
+B4->C4
+status : EMPTY_SRC partie : N
+
+Mouvement R
+A4->B4
+status : OK partie : N
+
+Mouvement B
+E1->D2
+status : OK partie : N
+
+Mouvement R
+B6->B5
+status : OK partie : N
+
+Mouvement B
+F2->E3
+status : OK partie : N
+
+Mouvement R
+B7->B6
+status : OK partie : N
+
+On va trop loin il y a donc l'erreur TOO_FAR
+Mouvement B
+G3->E5
+status : TOO_FAR partie : N
+
+Mouvement B
+G2->F3
+status : OK partie : N
+
+Mouvement R
+A7->B7
+status : OK partie : N
+
+Mouvement B
+F1->E2
+status : OK partie : N
+
+Comme précédemment avec les bleu on va trop loin,
+il y a donc ma même erreur pour les rouge TOO_FAR
+Mouvement R
+D7->E5
+status : TOO_FAR partie : N
+
+Mouvement R
+D7->D6
+status : OK partie : N
+
+Mouvement B
+G1->F2
+status : OK partie : N
+
+Mouvement R
+C6->C5
+status : OK partie : N
+
+Mouvement B
+E4->E5
+status : OK partie : N
+
+Mouvement R
+C7->D7
+status : OK partie : N
+
+Mouvement B
+F5->E6
+status : OK partie : N
+
+Mouvement R
+B7->C7
+status : OK partie : N
+
+Mouvement B
+G4->F5
+status : OK partie : N
+
+On fait jouer la mauvaise couleur il y a donc l'erreur BAD_COLOR:
+Mouvement R
+F4->E4
+status : BAD_COLOR partie : N
+
+Mouvement R
+C7->C6
+status : OK partie : N
+
+Mouvement B
+F3->E4
+status : OK partie : N
+
+Mouvement R
+A5->A4
+status : OK partie : N
+
+Mouvement B
+G3->G4
+status : OK partie : N
+
+Mouvement R
+A6->A5
+status : OK partie : N
+
+Mouvement B
+F2->F3
+status : OK partie : R
+Victoire : R (17 coups)
+
+-> Malgré les nombreuses erreurs de notre utilisateur on peut voir que
+notre jeu à toujours bien répondu et renvoyer les bonnes erreur sans jamais planter.
+Il est donc arrivé jusqu'à la fin de partie est donnée le vainqueur de celle-ci!
