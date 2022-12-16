@@ -1,3 +1,9 @@
+/*
+ Membre du groupe : Lucas BESSON et Amine Ladel
+ Groupe de classe : C2
+ Fichier de teste 03
+*/
+
 Grille de départ :
 char[][] state = {
             {'-', '-', '-', '-', 'R', 'R', 'R', 'R'},

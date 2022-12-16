@@ -1,15 +1,11 @@
-import java.sql.SQLOutput;
-import java.util.ArrayList;
-import java.util.List;
+/*
+ Membre du groupe : Lucas BESSON et Amine Ladel
+ Groupe de classe : C2
+ Code JAVA du jeu
+*/
+
 import java.util.Scanner;
 
-// à enlever à la fin
-import java.util.Arrays;
-
-/**
- Membre du groupe : Lucas BESSON et Amine Ladel
- Grroupe de classe : C2
- */
 public class StuckWin {
     static final Scanner input = new Scanner(System.in);
     private static final double BOARD_SIZE = 7;
