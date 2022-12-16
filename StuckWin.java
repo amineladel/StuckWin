@@ -94,13 +94,13 @@ public class StuckWin {
 
         }
         // Cela permet de vérifier que l'utilisateur sort pas du tableau :
-        // Si il rentre une valeur supérieur à la taille maxiumum
-        // des ligne et un valeur inférieur à -1 cela renvoie EXT_BOARD
-        // Nous faisions les même vérifiction pour les colonne.
+        // Si il rentre une valeur supérieure à la taille maxiumum
+        // des lignes et un valeur inférieur à -1 cela renvoie EXT_BOARD
+        // Nous faisions les mêmes vérifictions pour les colonnes.
         // La condition EXT_BOARD avec le caratère '-' que l'on vérifie plus bas
         // ne suffit pas, l'utilisateur peut aller plus loins que cela, sortir
-        // donc du tableau et cela ferais carcher les programme.
-        // Grâce à cette verification il y aura pas ce souci.
+        // donc du tableau et cela ferait cracher le programme.
+        // Grâce à cette verification il n'y aura pas ce souci.
         if (lignedest >= state.length || lignedest <= -1 ||
                 colonnedest >= state[0].length || colonnedest < 0){
             return Result.EXT_BOARD;
@@ -115,15 +115,15 @@ public class StuckWin {
             return Result.BAD_COLOR;
         }
 
-        // Vérifier que l'on joue pas sur une case qui est déjà prise par
+        // Vérifier que l'on ne joue pas sur une case qui est déjà prise par
         // une autre couleur
         if (state[lignedest][colonnedest] == 'R' ||
                 state[lignedest][colonnedest] == 'B') {
                 return Result.DEST_NOT_FREE;
         }
 
-        // Vérifier que l'on sors pas du tableau en allant sur une case
-        // représenté par '-'
+        // Vérifier que l'on ne sort pas du tableau en allant sur une case
+        // représentée par '-'
         if (state[lignedest][colonnedest] == '-' ||
                 colonnedest>state[0].length) {
             return Result.EXT_BOARD;
@@ -133,7 +133,7 @@ public class StuckWin {
         String[] possibledest = possibleDests(couleur, lignesource, colonnesource);
 
         // Vérifier que l'utilisateur ne va pas trop loin : on vérifie donc
-        // que la destination choisi elle est bien dans les destinations possibles.
+        // que la destination choisie elle est bien dans les destinations possibles.
         // le cas échéant, on renvoie TOO_FAR.
         if (!(possibledest[0]).equals(lcDest) &&
                 !(possibledest[1]).equals(lcDest) &&
@@ -141,8 +141,8 @@ public class StuckWin {
             return Result.TOO_FAR;
         }
 
-        // On parcourt le tableau de string crée plus haut, si la valeur
-        // de destination est dedans on fait le mouvement
+        // On parcourt le tableau de string créé plus haut, si la valeur
+        // de destination est dedans, on fait le mouvement
         for (int i = 0; i < 3; i++) {
             if (possibledest[i].equals(lcDest)) {
                 if (mode == ModeMvt.REAL) {
@@ -171,10 +171,10 @@ public class StuckWin {
         String[] resultat = new String[3];
         // Vérifation pour les bleus des destionations possible
         if (couleur =='B') {
-            // On vérifie si on n'a pas rentrer une lettre inférieur à -1,
-            // et si on a pas rentré une ligne qui sors du tableau.
+            // On vérifie si on n'a pas rentré une lettre inférieur à -1,
+            // et si on n'a pas rentré une ligne qui sort du tableau.
             // On fait de même pour les colonnes sauf que l'on vérifie
-            // si elle est bien supérieur à 0
+            // si elles sont bien supérieur à 0
             if (idLettre-1 < state.length && idLettre - 1 > -1 &&
                     idCol < state[0].length && idCol > 0) {
                 // Si la destination est possible,
@@ -207,7 +207,7 @@ public class StuckWin {
             }
 
         }
-        // Vérifation pour les rouges des destionations possible
+        // Vérifation pour les rouges des destionations possibles
         else if (couleur =='R'){
             if (idLettre+1 < state.length && idLettre + 1 > -1 &&
                     idCol < state[0].length && idCol > 0) {
@@ -260,9 +260,9 @@ public class StuckWin {
             System.out.print("  ");
             for (int j = 0; j < 7; j++) {
                 if (j >= i) {
-                    // On mets les R en rouge et affiche les lettres (A,B,C..) avec
+                    // On met les R en rouge et affiche les lettres (A,B,C..) avec
                     // le tableau créé tout au début du programme. Enfin on fait
-                    // les espace nésessaire pour l'affichage
+                    // les espacse nésessaires pour l'affichage
                     if(state[j-i][j+1] == 'R')
                         System.out.print(ConsoleColors.RED_BACKGROUND +
                                 lettre[j-i] + (j+1) + ConsoleColors.RESET + "  " );

@@ -15,7 +15,7 @@ char[][] state = {
             {'-', 'B', 'B', 'B', 'B', '-', '-', '-'},
     };
 
-On testera ici les différentes erreur qu'un utilisateur pourrait faire et
+On testera ici les différentes erreurs qu'un utilisateur pourrait faire et
 nous verrons que notre programme ne crache jamais, les gère toutes et renvoie
 les bonnes erreurs.
 
@@ -41,13 +41,13 @@ CC
 D2C3->CC
 status : EXT_BOARD partie : N
 
-On cherche à aller sur une case qui est déjà occupé par une autre couleur,
+On cherche à aller sur une case qui est déjà occupée par une autre couleur,
 destination est pas possible, on a donc bien l’erreur DEST_NOT_FREE :
 Mouvement B
 D3->C4
 status : DEST_NOT_FREE partie : N
 
-On va trop loin, les règles du jeu stipule que l'on peut aller uniquement
+On va trop loin, les règles du jeu stipulent que l'on peut aller uniquement
 au maximum à une case plus loin et non deux comme dans ce cas,
 il y donc l'erreur TOO_FAR :
 Mouvement B

@@ -16,10 +16,10 @@ char[][] state = {
             {'-', 'B', 'B', 'B', 'B', '-', '-', '-'},
     };
 
-On testera ici la fin de partie avec la victoire simple des bleu
-Cette parti sera plus long que la 01, nous chercheront à faire bouger beaucoup
+On testera ici la fin de partie avec la victoire simple des bleues
+Cette partie sera plus long que la 01, nous chercherons à faire bouger beaucoup
 les pions afin de vérifier que le programme fonctionne bien lorsque
-il y a des mélange de point un peu partout.
+il y a des mélanges de point un peu partout.
 
 Mouvement B
 D2->C2
@@ -269,5 +269,5 @@ D5->E5
 status : OK partie : B
 Victoire : B (41 coups)
 
-La fin de partie fonctionne bien il affiche le bon vainqueur (Bleu)
+La fin de partie fonctionne bien; Il affiche le bon vainqueur (Bleu)
 avec le bon nombre de coups.

@@ -108,5 +108,5 @@ D2->C2
 status : OK partie : R
 Victoire : R (14 coups)
 
-La fin de partie fonctionne bien il affiche le bon vainqueur (Rouge)
+La fin de partie fonctionne bien. Il affiche le bon vainqueur (Rouge)
 avec le bon nombre de coups.
