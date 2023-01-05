@@ -1,9 +1,11 @@
 /*
  Membre du groupe : Lucas BESSON et Amine Ladel
  Groupe de classe : C2
- Code JAVA du jeu
+ Groupe de projet : 38
+ Code source JAVA du jeu
 */
 
+import java.sql.SQLOutput;
 import java.util.Scanner;
 
 public class StuckWin {
@@ -64,6 +66,8 @@ public class StuckWin {
     // Ce tableau permet d'afficher les lettres dans notre affichage
     // -> Utilisé dans la fonction affiche.
     char[] lettre = {'A','B','C','D','E','F','G'};
+
+    static int number;
 
 
 
@@ -321,8 +325,26 @@ public class StuckWin {
      * @return tableau contenant la position de départ et la destination du pion à jouer.
      */
     String[] jouerIA(char couleur) {
-        // votre code ici. Supprimer la ligne ci-dessous.
-        throw new java.lang.UnsupportedOperationException("à compléter");
+        String[] rslt = new String[2];
+        for (int i = 0; i<state.length ; i++){
+            for (int j = 0; j<state[i].length ; j++){
+                    String[] temp = possibleDests(couleur, i, j);
+                    for (int k = 0; k < temp.length; k++) {
+                        if (deplace(couleur, ("" + lettre[i]+ j), temp[k],
+                                ModeMvt.SIMU) == Result.OK){
+                            rslt[0]= ("" + lettre[i]+ j);
+                            rslt[1]= temp[k];
+                            return rslt;
+                        }
+                    }
+            }
+        }
+        return rslt;
+    }
+
+    String[] jouerIA2(char couleur) {
+        String[] rslt = new  String[2];
+        return rslt;
     }
 
     /**
@@ -340,10 +362,13 @@ public class StuckWin {
                 //System.err.println("Mouvement " + couleur);
                 src = input.next();
                 dst = input.next();
+                System.err.println(src);
+                System.err.println(dst);
                 System.out.println(src + "->" + dst);
                 //System.err.println(src + "->" + dst);
                 break;
             case 'R':
+                /*
                 // Cela permet de faire jouer le bleu et le rouge par un utilisateur
                 System.out.println("Mouvement " + couleur);
                 //System.err.println("Mouvement " + couleur);
@@ -352,14 +377,17 @@ public class StuckWin {
                 System.out.println(src + "->" + dst);
                 //System.err.println(src + "->" + dst);
                 break;
+                */
                 // Nous ferons la version avec l’IA dans la prochaine SAE
-                /*
                 System.out.println("Mouvement " + couleur);
-                mvtIa = jouerIA(couleur);
+                if (number==1)
+                    mvtIa = jouerIA(couleur);
+                else
+                    mvtIa = jouerIA(couleur);
                 src = mvtIa[0];
                 dst = mvtIa[1];
                 System.out.println(src + "->" + dst);
-                break;*/
+                break;
         }
         return new String[]{src, dst};
     }
@@ -402,6 +430,9 @@ public class StuckWin {
 
 
     public static void main(String[] args) {
+        if (args.length>0){
+            number = Integer.parseInt(args[0]);
+        }
         StuckWin jeu = new StuckWin();
         String src = "";
         String dest;
