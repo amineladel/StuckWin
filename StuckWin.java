@@ -6,6 +6,8 @@
 */
 
 import java.sql.SQLOutput;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class StuckWin {
@@ -324,27 +326,107 @@ public class StuckWin {
      * @param couleur couleur du pion à jouer
      * @return tableau contenant la position de départ et la destination du pion à jouer.
      */
-    String[] jouerIA(char couleur) {
-        String[] rslt = new String[2];
+    String[] jouerIA4(char couleur) {
+        String[] result = new String[2];
+        List<Integer> possible = new ArrayList<Integer>();
         for (int i = 0; i<state.length ; i++){
             for (int j = 0; j<state[i].length ; j++){
                     String[] temp = possibleDests(couleur, i, j);
                     for (int k = 0; k < temp.length; k++) {
                         if (deplace(couleur, ("" + lettre[i]+ j), temp[k],
                                 ModeMvt.SIMU) == Result.OK){
-                            rslt[0]= ("" + lettre[i]+ j);
-                            rslt[1]= temp[k];
-                            return rslt;
+                            result[0]= ("" + lettre[i]+ j);
+                            result[1]= temp[k];
+                            possible.add(k);
+                            int size = possible.size();
+                            int random = (int)(Math.random()*size);
+                            System.out.println(random);
                         }
+                        return result;
                     }
+            }
+        }
+        return result;
+    }
+
+    String[] jouerIA(char couleur) {
+        String[] rslt = new String[2];
+        for (int i = 0; i<state.length ; i++){
+            for (int j = 0; j<state[i].length ; j++){
+                String[] temp = possibleDests(couleur, i, j);
+                for (int k = 0; k < temp.length; k++) {
+                    if (deplace(couleur, ("" + lettre[i]+ j), temp[k],
+                            ModeMvt.SIMU) == Result.OK){
+                        rslt[0]= ("" + lettre[i]+ j);
+                        rslt[1]= temp[k];
+                        return rslt;
+                    }
+                }
             }
         }
         return rslt;
     }
 
+    void jouerIA3(char couleur) {
+        int[][] test = tabOK(couleur,tabPion(couleur));
+        for (int i = 0; i < test.length; i++) {
+            for (int j = 0; j < 2; j++) {
+                System.out.print(test[i][j]);
+
+
+            }
+            System.out.println();
+
+        }
+    }
+
+    int[][]tabPion (char couleur){
+        int temp = 0;
+        int tab[][]= new int[13][2];
+        for (int i = 0; i<state.length ; i++) {
+            for (int j = 0; j < state[i].length; j++) {
+                if (state[i][j] == couleur) {
+                    tab[temp][0] = i;
+                    tab[temp][1] = j;
+                    temp++;
+                }
+                if (temp==13){
+
+                    return tab;
+                }
+            }
+        }
+
+        return tab;
+    }
+
+    int[][] tabOK (char couleur, int[][] tab){
+        int count = 0;
+        for (int i = 0; i<tab.length ; i++) {
+            String conv = "" + (char)(tab[i][0] + 65) +(char)(tab[i][1] + 48);
+            String[] temp = possibleDests(couleur, tab[i][0],tab[i][1]);
+            if (!(temp[0].equals(conv) && temp[1].equals(conv) && temp[2].equals(conv))){
+                count++;
+            }
+        }
+        int[][] tabFInal = new int[count][2];
+        count=0;
+        for (int i = 0; i<tab.length ; i++) {
+            String conv = "" + (char)(tab[i][0] + 65) +(char)(tab[i][1] + 48);
+            String[] temp = possibleDests(couleur, tab[i][0],tab[i][1]);
+            if (!(temp[0].equals(conv) && temp[1].equals(conv) && temp[2].equals(conv))){
+                tabFInal[count][0]= tab[i][0];
+                tabFInal[count][1]= tab[i][1];
+                count++;
+            }
+        }
+        return tabFInal;
+
+        }
+
     String[] jouerIA2(char couleur) {
-        String[] rslt = new  String[2];
-        return rslt;
+        String[] result = new String[2];
+        return result;
     }
 
     /**
@@ -362,8 +444,6 @@ public class StuckWin {
                 //System.err.println("Mouvement " + couleur);
                 src = input.next();
                 dst = input.next();
-                System.err.println(src);
-                System.err.println(dst);
                 System.out.println(src + "->" + dst);
                 //System.err.println(src + "->" + dst);
                 break;
@@ -443,7 +523,7 @@ public class StuckWin {
         char nextCouleur = jeu.joueurs[1];
         char tmp;
         int cpt = 0;
-
+        jeu.jouerIA3(nextCouleur);
         // version console
         do {
             // séquence pour Bleu ou rouge
