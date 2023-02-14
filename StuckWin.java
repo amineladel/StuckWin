@@ -3,11 +3,11 @@
  Groupe de classe : C2
  Groupe de projet : 38
  Code source JAVA du jeu
+ Pour lancer l'ia naif : java StuckWin 1
+ Pour lancer l'ia intéligente : java StuckWin 2
 */
 
-import java.sql.SQLOutput;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
 public class StuckWin {
@@ -30,7 +30,15 @@ public class StuckWin {
             {'-', 'B', 'B', 'B', 'B', '.', '-', '-'},
             {'-', 'B', 'B', 'B', 'B', '-', '-', '-'},
     };
-
+    char[][] state_ia = {
+            {'-', '-', '-', '-', 'R', 'R', 'R', 'R'},
+            {'-', '-', '-', '.', 'R', 'R', 'R', 'R'},
+            {'-', '-', '.', '.', '.', 'R', 'R', 'R'},
+            {'-', 'B', 'B', '.', '.', '.', 'R', 'R'},
+            {'-', 'B', 'B', 'B', '.', '.', '.', '-'},
+            {'-', 'B', 'B', 'B', 'B', '.', '-', '-'},
+            {'-', 'B', 'B', 'B', 'B', '-', '-', '-'},
+    };
     // Ci-dessous différents tableaux de test de notre jeu :
     /*
             {'-', '-', '-', '-', 'R', 'B', 'R', 'R'},
@@ -69,10 +77,7 @@ public class StuckWin {
     // -> Utilisé dans la fonction affiche.
     char[] lettre = {'A','B','C','D','E','F','G'};
 
-    static int number;
-
-
-
+    int number;
 
         /**
          * Déplace un pion ou simule son déplacement
@@ -320,118 +325,226 @@ public class StuckWin {
     }
 
 
-
     /**
      * Joue un tour
      * @param couleur couleur du pion à jouer
      * @return tableau contenant la position de départ et la destination du pion à jouer.
      */
-    String[] jouerIA4(char couleur) {
-        String[] result = new String[2];
-        List<Integer> possible = new ArrayList<Integer>();
+    String[] jouerIA(char couleur) {
+        String[] rslt = new String[2];
         for (int i = 0; i<state.length ; i++){
             for (int j = 0; j<state[i].length ; j++){
                     String[] temp = possibleDests(couleur, i, j);
                     for (int k = 0; k < temp.length; k++) {
                         if (deplace(couleur, ("" + lettre[i]+ j), temp[k],
                                 ModeMvt.SIMU) == Result.OK){
-                            result[0]= ("" + lettre[i]+ j);
-                            result[1]= temp[k];
-                            possible.add(k);
-                            int size = possible.size();
-                            int random = (int)(Math.random()*size);
-                            System.out.println(random);
+                            rslt[0]= ("" + lettre[i]+ j);
+                            rslt[1]= temp[k];
+                            return rslt;
                         }
-                        return result;
                     }
-            }
-        }
-        return result;
-    }
-
-    String[] jouerIA(char couleur) {
-        String[] rslt = new String[2];
-        for (int i = 0; i<state.length ; i++){
-            for (int j = 0; j<state[i].length ; j++){
-                String[] temp = possibleDests(couleur, i, j);
-                for (int k = 0; k < temp.length; k++) {
-                    if (deplace(couleur, ("" + lettre[i]+ j), temp[k],
-                            ModeMvt.SIMU) == Result.OK){
-                        rslt[0]= ("" + lettre[i]+ j);
-                        rslt[1]= temp[k];
-                        return rslt;
-                    }
-                }
             }
         }
         return rslt;
     }
 
-    void jouerIA3(char couleur) {
-        int[][] test = tabOK(couleur,tabPion(couleur));
-        for (int i = 0; i < test.length; i++) {
-            for (int j = 0; j < 2; j++) {
-                System.out.print(test[i][j]);
 
-
-            }
-            System.out.println();
-
-        }
-    }
-
-    int[][]tabPion (char couleur){
-        int temp = 0;
-        int tab[][]= new int[13][2];
+    /**
+     * IA-INTELIGENTE qui analyse le nombre de possibilié de cou de jouer
+     * de l'adversaire en fonction de chaques pions joué
+     * @param couleur du pion à jouer
+     * @return tableau de deux chaînes {source,destination} du pion à jouer
+     */
+    String[] jouerIA2(char couleur) {
+        char autre_couleur;
+        if (couleur == 'B') autre_couleur = 'R';
+        else autre_couleur = 'B' ;
+        String[] rslt = new String[2];
+        String src = jouerIA(couleur)[0] ;
+        String dst = jouerIA(couleur)[1];
+        Random random = new Random();
+        int possibilite = 0;
         for (int i = 0; i<state.length ; i++) {
             for (int j = 0; j < state[i].length; j++) {
                 if (state[i][j] == couleur) {
-                    tab[temp][0] = i;
-                    tab[temp][1] = j;
-                    temp++;
-                }
-                if (temp==13){
-
-                    return tab;
+                    String[] possible_dest = possibleDests(couleur, i, j);
+                    for (int k =0; k<possible_dest.length ; k++){
+                        if (deplace(couleur, "" + lettre[i] + j,
+                                possible_dest[k], ModeMvt.SIMU)==Result.OK){
+                            state_ia[i][j] = '.';
+                            state_ia[convertir_pion(possible_dest[k])[0]]
+                                    [convertir_pion(possible_dest[k])[1]] = couleur ;
+                            if (possibilite<nb_de_maniere_poss_de_jouer
+                                    (state_ia, autre_couleur)){
+                                src = "" + lettre[i] + j ;
+                                dst = possible_dest[k];
+                                possibilite=nb_de_maniere_poss_de_jouer
+                                        (state_ia, autre_couleur);
+                            } else if (possibilite == nb_de_maniere_poss_de_jouer
+                                    (state_ia, autre_couleur)) {
+                                int choix = random.nextInt(2);
+                                switch (choix){
+                                    case 0 :
+                                        src = "" + lettre[i] + j ;
+                                        dst = possible_dest[k];
+                                        break;
+                                    case 1 :
+                                        break;
+                                }
+                            } else {
+                                state_ia[i][j] = couleur;
+                                state_ia[convertir_pion(possible_dest[k])[0]]
+                                        [convertir_pion(possible_dest[k])[1]] = '.' ;
+                            }
+                        }
+                    }
                 }
             }
         }
-
-        return tab;
+        rslt[0] = src ;
+        rslt[1] = dst ;
+        return rslt;
+    }
+    
+    /**
+     * Compte le nombre de possibilite en fonciton de la couleur
+     * @param plateau plateau à prendre pour compter le nombre de possiblté
+     * @param couleur couleur du pion à jouer
+     * @return nombre de possibilite de jouer de couleur
+     */
+    int nb_de_maniere_poss_de_jouer(char[][] plateau, char couleur){
+        int resultat = 0;
+        for (int i = 0; i<plateau.length ; i++) {
+            for (int j = 0; j < plateau[i].length; j++) {
+                if (plateau[i][j] == couleur) {
+                    String[] temp = possibleDests(couleur, i, j);
+                    for (int k = 0; k < temp.length; k++) {
+                        if (deplace_IA(couleur, ("" + lettre[i] + j), temp[k],
+                                ModeMvt.SIMU, plateau) == Result.OK) {
+                            resultat+=1;
+                        }
+                    }
+                }
+            }
+        }
+        return resultat;
     }
 
-    int[][] tabOK (char couleur, int[][] tab){
-        int count = 0;
-        for (int i = 0; i<tab.length ; i++) {
-            String conv = "" + (char)(tab[i][0] + 65) +(char)(tab[i][1] + 48);
-            String[] temp = possibleDests(couleur, tab[i][0],tab[i][1]);
-            if (!(temp[0].equals(conv) && temp[1].equals(conv) && temp[2].equals(conv))){
-                count++;
-            }
+    /**
+     * Convertion en entier d'un pion
+     * @param col valeur d'un pion en string
+     * @return tableau d'entier
+     */
+    public int[] convertir_pion(String col) {
+        int[] rslt = new int[2];
+        rslt[1] = Integer.parseInt(col.substring(1));
+        switch (col.charAt(0)) {
+            case 'A' -> rslt[0] = 0;
+            case 'B' -> rslt[0] = 1;
+            case 'C' -> rslt[0] = 2;
+            case 'D' -> rslt[0] = 3;
+            case 'E' -> rslt[0] = 4;
+            case 'F' -> rslt[0] = 5;
+            case 'G' -> rslt[0] = 6;
         }
-        int[][] tabFInal = new int[count][2];
-        count=0;
-        for (int i = 0; i<tab.length ; i++) {
-            String conv = "" + (char)(tab[i][0] + 65) +(char)(tab[i][1] + 48);
-            String[] temp = possibleDests(couleur, tab[i][0],tab[i][1]);
-            if (!(temp[0].equals(conv) && temp[1].equals(conv) && temp[2].equals(conv))){
-                tabFInal[count][0]= tab[i][0];
-                tabFInal[count][1]= tab[i][1];
-                count++;
+        return rslt;
+    }
+
+
+    /**
+     * Déplace un pion ou simule son déplacement pour notre IA Intéligente
+     * @param couleur couleur du pion à déplacer
+     * @param lcSource case source Lc
+     * @param lcDest case destination Lc
+     * @param mode ModeMVT.REAL/SIMU selon qu'on réalise effectivement le déplacement ou qu'on le simule seulement.
+     * @param plateau tableau à deux dimention
+     * @return enum {OK, BAD_COLOR, DEST_NOT_FREE, EMPTY_SRC, TOO_FAR, EXT_BOARD, EXIT} selon le déplacement
+     */
+    Result deplace_IA(char couleur, String lcSource, String lcDest,
+                      ModeMvt mode, char[][] plateau) {
+        // Cela permet de récupérer les valeurs de lcSourc et lcDest et
+        // de les décomposer afin d'obtenir séparément le numéro de ligne
+        // ainsi que le numéro de colonne, tous cela en entier (int)
+        int lignesource = 0;
+        int lignedest = 0;
+        int colonnesource = Character.getNumericValue(lcSource.charAt(1));
+        int colonnedest = Character.getNumericValue(lcDest.charAt(1));
+        for (int i = 0; i < lettre.length; i++) {
+            if (lcSource.charAt(0) == lettre[i]) {
+                lignesource = i;
             }
-        }
-        return tabFInal;
+            if (lcDest.charAt(0) == lettre[i]) {
+                lignedest = i;
+            }
 
         }
+        // Cela permet de vérifier que l'utilisateur sort pas du tableau :
+        // Si il rentre une valeur supérieure à la taille maxiumum
+        // des lignes et un valeur inférieur à -1 cela renvoie EXT_BOARD
+        // Nous faisions les mêmes vérifictions pour les colonnes.
+        // La condition EXT_BOARD avec le caratère '-' que l'on vérifie plus bas
+        // ne suffit pas, l'utilisateur peut aller plus loins que cela, sortir
+        // donc du tableau et cela ferait cracher le programme.
+        // Grâce à cette verification il n'y aura pas ce souci.
+        if (lignedest >= state.length || lignedest <= -1 ||
+                colonnedest >= plateau[0].length || colonnedest < 0){
+            return Result.EXT_BOARD;
+        }
 
-    String[] jouerIA2(char couleur) {
-        String[] result = new String[2];
-        return result;
+        //Vérifier que l'utilisateur ne fait pas jouer une case vide à savoir un '.'
+        if (state[lignesource][colonnesource] == VIDE) {
+            return Result.EMPTY_SRC;
+        }
+        // Vérifier que c'est bien la bonne couleur qui joue
+        if (state[lignesource][colonnesource] != couleur) {
+            return Result.BAD_COLOR;
+        }
+
+        // Vérifier que l'on ne joue pas sur une case qui est déjà prise par
+        // une autre couleur
+        if (state[lignedest][colonnedest] == 'R' ||
+                state[lignedest][colonnedest] == 'B') {
+            return Result.DEST_NOT_FREE;
+        }
+
+        // Vérifier que l'on ne sort pas du tableau en allant sur une case
+        // représentée par '-'
+        if (state[lignedest][colonnedest] == '-' ||
+                colonnedest>plateau[0].length) {
+            return Result.EXT_BOARD;
+        }
+
+        // On met dans un tableau de string le retour de la fonction possibleDests
+        String[] possibledest = possibleDests(couleur, lignesource, colonnesource);
+
+        // Vérifier que l'utilisateur ne va pas trop loin : on vérifie donc
+        // que la destination choisie elle est bien dans les destinations possibles.
+        // le cas échéant, on renvoie TOO_FAR.
+        if (!(possibledest[0]).equals(lcDest) &&
+                !(possibledest[1]).equals(lcDest) &&
+                !(possibledest[2]).equals(lcDest)) {
+            return Result.TOO_FAR;
+        }
+
+        // On parcourt le tableau de string créé plus haut, si la valeur
+        // de destination est dedans, on fait le mouvement
+        for (int i = 0; i < 3; i++) {
+            if (possibledest[i].equals(lcDest)) {
+                if (mode == ModeMvt.REAL) {
+                    plateau[lignesource][colonnesource] = VIDE;
+                    plateau[lignedest][colonnedest] = couleur;
+                    return Result.OK;
+                } else {
+                    return Result.OK;
+                }
+            }
+        }
+        return Result.EXIT;
     }
 
     /**
      * gère le jeu en fonction du joueur/couleur
-     * @param couleur
+     * @param couleur du pion à jouer
      * @return tableau de deux chaînes {source,destination} du pion à jouer
      */
     String[] jouer(char couleur){
@@ -448,25 +561,23 @@ public class StuckWin {
                 //System.err.println(src + "->" + dst);
                 break;
             case 'R':
-                /*
-                // Cela permet de faire jouer le bleu et le rouge par un utilisateur
                 System.out.println("Mouvement " + couleur);
-                //System.err.println("Mouvement " + couleur);
-                src = input.next();
-                dst = input.next();
-                System.out.println(src + "->" + dst);
-                //System.err.println(src + "->" + dst);
-                break;
-                */
-                // Nous ferons la version avec l’IA dans la prochaine SAE
-                System.out.println("Mouvement " + couleur);
-                if (number==1)
+                if (number==1){
+                    //long debut = System.nanoTime();
                     mvtIa = jouerIA(couleur);
-                else
-                    mvtIa = jouerIA(couleur);
+                    //System.out.println(System.nanoTime() - debut + "ns");
+                }
+                else{
+                    //long debut = System.nanoTime();
+                    mvtIa = jouerIA2(couleur);
+                    //System.out.println(System.nanoTime() - debut + "ns");
+                }
+
                 src = mvtIa[0];
                 dst = mvtIa[1];
+                //System.err.println("Mouvement " + couleur);
                 System.out.println(src + "->" + dst);
+                //System.err.println(src + "->" + dst);
                 break;
         }
         return new String[]{src, dst};
@@ -474,8 +585,8 @@ public class StuckWin {
 
     /**
      * retourne 'R' ou 'B' si vainqueur, 'N' si partie pas finie
-     * @param couleur
-     * @return
+     * @param couleur du pion à jouer
+     * @return couleur victoire
      */
     char finPartie(char couleur){
         // on parcours l'ensemble du tableau state
@@ -507,45 +618,43 @@ public class StuckWin {
     }
 
 
-
-
     public static void main(String[] args) {
-        if (args.length>0){
-            number = Integer.parseInt(args[0]);
-        }
-        StuckWin jeu = new StuckWin();
+            StuckWin jeu = new StuckWin();
+            if (args.length>0){
+                jeu.number = Integer.parseInt(args[0]);
+            }
         String src = "";
-        String dest;
-        String[] reponse;
-        Result status;
-        char partie = 'N';
-        char curCouleur = jeu.joueurs[0];
-        char nextCouleur = jeu.joueurs[1];
-        char tmp;
-        int cpt = 0;
-        jeu.jouerIA3(nextCouleur);
-        // version console
-        do {
-            // séquence pour Bleu ou rouge
-            jeu.affiche();
+            String dest;
+            String[] reponse;
+            Result status;
+            char partie = 'N';
+            char curCouleur = jeu.joueurs[0];
+            char nextCouleur = jeu.joueurs[1];
+            char tmp;
+            int cpt = 0;
+
+            // version console
             do {
-                status = Result.EXIT;
-                reponse = jeu.jouer(curCouleur);
-                src = reponse[0];
-                dest = reponse[1];
-                if("q".equals(src))
-                    return;
-                status = jeu.deplace(curCouleur, src, dest, ModeMvt.REAL);
-                partie = jeu.finPartie(nextCouleur);
-                System.out.println("status : "+status + " partie : " + partie);
-                //System.err.println("status : "+status + " partie : " + partie);
-            } while(status != Result.OK && partie=='N');
-            tmp = curCouleur;
-            curCouleur = nextCouleur;
-            nextCouleur = tmp;
-            cpt ++;
-        } while(partie =='N'); // TODO affiche vainqueur
-        System.out.printf("Victoire : " + partie + " (" + (cpt/2) + " coups)");
-        //System.err.printf("Victoire : " + partie + " (" + (cpt/2) + " coups)");
-    }
+                // séquence pour Bleu ou rouge
+                jeu.affiche();
+                do {
+                    status = Result.EXIT;
+                    reponse = jeu.jouer(curCouleur);
+                    src = reponse[0];
+                    dest = reponse[1];
+                    if("q".equals(src))
+                        return;
+                    status = jeu.deplace(curCouleur, src, dest, ModeMvt.REAL);
+                    partie = jeu.finPartie(nextCouleur);
+                    System.out.println("status : "+status + " partie : " + partie);
+                    //System.err.println("status : "+status + " partie : " + partie);
+                } while(status != Result.OK && partie=='N');
+                tmp = curCouleur;
+                curCouleur = nextCouleur;
+                nextCouleur = tmp;
+                cpt ++;
+            } while(partie =='N'); // TODO affiche vainqueur
+            System.out.printf("Victoire : " + partie + " (" + (cpt/2) + " coups)");
+            //System.err.printf("Victoire : " + partie + " (" + (cpt/2) + " coups)");
+        }
 }
